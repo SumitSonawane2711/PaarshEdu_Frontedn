@@ -8,7 +8,7 @@ export const getAllInstrucotrs  = createAsyncThunk<Instructor[]>(
     'instructor/fetchAll',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get('/api/v1/courses/instructor');
+            const response = await axios.get('http://localhost:3000/api/v1/courses/instructor');
             return response.data.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -21,7 +21,7 @@ export const createInstructor  = createAsyncThunk<Instructor,FormData>(
     'instructor/create',
     async(formData,thunkAPI) => {
         try {
-            const response = await axios.post("/api/v1/courses/createInstructor",formData);
+            const response = await axios.post("http://localhost:3000/api/v1/courses/createInstructor",formData);
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -36,7 +36,7 @@ export const deleteInstructor = createAsyncThunk<number,number>(
         try {
             console.log("instructorId :",instructorId);
             
-            const response = await axios.post(`/api/v1/courses/deleteinstructor/${instructorId}`)
+            const response = await axios.post(`http://localhost:3000/api/v1/courses/deleteinstructor/${instructorId}`)
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -54,7 +54,7 @@ Instructor,
         
         try {
             const response = await axios.post(
-                "/api/v1/courses/updateInstructor",
+                "http://localhost:3000/api/v1/courses/updateInstructor",
                 instructorData
               );
               
@@ -107,3 +107,5 @@ export default instructorSlice.reducer;
 
 // selectors
 export const selectAllInstructors = (state: {instructors: InstructorState}) => state.instructors.items;
+export const selectInstructorStatus = (state:{Instructor:InstructorState})  => state.Instructor.status;
+export const selectInstructorError = (state: {Instructor : InstructorState}) => state.Instructor.error;

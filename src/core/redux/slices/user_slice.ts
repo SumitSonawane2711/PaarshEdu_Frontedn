@@ -12,7 +12,7 @@ export const registerUser = createAsyncThunk<User, UserInput>(
     'user/register',
     async (userData, thunkAPI) => {
         try {
-            const response = await axios.post('/api/v1/user/register', userData);
+            const response = await axios.post('http://localhost:3000/api/v1/user/register', userData);
             return response.data.user;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -29,7 +29,7 @@ export const loginUser = createAsyncThunk<User, LoginInput>(
     'user/login',
     async (loginData, thunkAPI) => {
         try {
-            const response = await axios.post('/api/v1/user/login', loginData);
+            const response = await axios.post('http://localhost:3000/api/v1/user/login', loginData);
             return response.data.user;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -97,9 +97,7 @@ const initialState: UserState = {
  });
  
  export default userSlice.reducer;
- 
- //export const { logout } = userSlice.actions;
- 
+  
  export const selectCurrentUser = (state: { user: UserState }): UserState['user'] => state.user.user;
  export const selectUserStatus = (state: { user: UserState }): UserState['status'] => state.user.status;
  export const selectUserError = (state: { user: UserState }): UserState['error'] => state.user.error;

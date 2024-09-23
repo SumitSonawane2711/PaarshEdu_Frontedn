@@ -1,19 +1,16 @@
 import { Category, CategoryState } from "@/core/types/category";
-import { createAsyncThunk, createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 
-// Create an entity adapter for categories
-const categoriesAdapter = createEntityAdapter<Category>();
-
-// Thunks for async operations
+// Initial state using the entity adapter's state management
 
 // Fetch all categories
 export const getAllCategories = createAsyncThunk(
-  "categories/getAll",
+  "courses/categories",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("/api/v1/courses/catagories");
-      return response.data as Category[];
+      const response = await axios.get("http://localhost:3000/api/v1/courses/catagories");
+      return response.data;
     } catch (error) {
       const typedError = error as AxiosError;
       return thunkAPI.rejectWithValue(
@@ -25,105 +22,118 @@ export const getAllCategories = createAsyncThunk(
 
 // Create a new category
 export const createCategory = createAsyncThunk<Category, FormData>(
-  "categories/create",
+  "category/create",
   async (formData, thunkAPI) => {
     try {
-      const response = await axios.post("/api/v1/courses/createCategory", formData);
-      return response.data as Category;
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/courses/createCategory",
+        formData
+      );
+      return response.data;
     } catch (error) {
       const typedError = error as AxiosError;
       return thunkAPI.rejectWithValue(
-        typedError.response?.data || "Failed to create category"
+        typedError.response?.data || "failed to create category"
       );
     }
   }
 );
 
-// Delete a category
+
+// Update a category
+export const updateCategory = createAsyncThunk<
+  Category,
+  { categoryData: Partial<Category> }
+>("category/update", async (categoryData, thunkAPI) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/api/v1/courses/updateCategory`,
+      categoryData
+    );
+    return response.data;
+  } catch (error) {
+    const typedError = error as AxiosError;
+
+    return thunkAPI.rejectWithValue(
+      typedError.response?.data || "Failed to update category"
+    );
+  }
+});
+
+//delete category
 export const deleteCategory = createAsyncThunk<number, number>(
-  "categories/delete",
-  async (categoryId, thunkAPI) => {
+  "category/delete",
+  async (categoryId: number, thunkAPI) => {
     try {
-      await axios.post(`/api/v1/courses/delete-categories/${categoryId}`);
+      await axios.post(`http://localhost:3000/api/v1/courses/delete-categories/${categoryId}`);
       return categoryId;
     } catch (error) {
       const typedError = error as AxiosError;
-      return thunkAPI.rejectWithValue(
-        typedError.response?.data || "Failed to delete category"
-      );
-    }
-  }
-);
 
-// Update a category
-export const updateCategory = createAsyncThunk<Category, { categoryData: Partial<Category> }>(
-  "categories/update",
-  async ({ categoryData }, thunkAPI) => {
-    try {
-      const response = await axios.post(`/api/v1/courses/updateCategory`, categoryData);
-      return response.data as Category;
-    } catch (error) {
-      const typedError = error as AxiosError;
       return thunkAPI.rejectWithValue(
-        typedError.response?.data || "Failed to update category"
+        typedError.response?.data || "fail to delete-categories"
       );
     }
   }
 );
 
 // Create the slice
-
 const categorySlice = createSlice({
   name: "categories",
-  initialState: categoriesAdapter.getInitialState<CategoryState>({
-    items: [] as Category[],
+  initialState: {
+    items: [] as Category[] | null,
     status: "idle",
     error: null,
-  }),
+  } as CategoryState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       // Get all categories
       .addCase(getAllCategories.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        categoriesAdapter.setAll(state, action.payload);
+        state.status = 'succeeded';
+        state.items = action.payload;
       })
       // Create category
       .addCase(createCategory.fulfilled, (state, action) => {
-        categoriesAdapter.addOne(state, action.payload);
+        state.status = 'succeeded';
+        state.items?.push(action.payload);
       })
       // Delete category
       .addCase(deleteCategory.fulfilled, (state, action) => {
-        categoriesAdapter.removeOne(state, action.payload);
+        state.items = state.items?.filter((item)=> item.id !== action.payload) || null
       })
       // Update category
       .addCase(updateCategory.fulfilled, (state, action) => {
-        categoriesAdapter.updateOne(state, {
-          id: action.payload.id,
-          changes: action.payload,
-        });
+        const index = state.items?.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        if (state.items && index !== undefined && index !== -1) {
+          state.items[index] = action.payload;
+        }
       })
-      // Handle pending state
+      // Handle loading state
       .addMatcher(
         (action) => action.type.endsWith("/pending"),
         (state) => {
-          state.status = "loading";
+          state.status = 'loading';
+          state.error = null;
         }
       )
-      // Handle rejected state
+      // Handle rejected state with proper error handling
       .addMatcher(
         (action) => action.type.endsWith("/rejected"),
         (state, action) => {
-          state.status = "failed";
-          state.error = action.type as string;
+          state.status = 'failed';
+          state.error = action.type;
         }
       );
   },
 });
 
-// Selectors
-export const selectAllCategories = (state: { category: CategoryState }) => state.category.items;
-export const selectCategoryStatus = (state: { courses: CategoryState }) => state.courses.status;
-export const selectCategoryError = (state: { courses: CategoryState }) => state.courses.error;
+
+// Selectors for the categories
+export const selectAllCategories = (state: {categories: CategoryState;}) => state.categories.items
+export const selectCategoryStatus = (state: { categories: CategoryState }) => state.categories.status;
+export const selectCategoryError = (state: { categories: CategoryState }) => state.categories.error;
 
 export default categorySlice.reducer;

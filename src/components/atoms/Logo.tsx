@@ -7,7 +7,7 @@ function Logo({
   }) {
     return (
       <div className={className}>
-        <img src="/PAARSHEDU LOGO.png" width={width} />
+        <img src='/public/PAARSHEDU LOGO (1).png' width={width} />
       </div>
     );
   }
