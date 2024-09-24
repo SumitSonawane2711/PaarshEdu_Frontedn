@@ -1,3 +1,5 @@
+import { ModeToggle } from '@/components/atoms/mode-toggle';
+import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster'
 import { getAllCategories } from '@/core/redux/slices/category_slice';
 import { fetchCourses } from '@/core/redux/slices/course_slice';
@@ -23,9 +25,9 @@ const Admin_dashboard :React.FC = () => {
   return (
     <div className="flex h-screen">
     {/* Sidebar */}
-    <aside className="w-64 bg-gray-800 text-white">
+    <aside className="w-64 border-r-2 border-slate-300">
         <div className="p-4 text-xl font-bold">Admin Panel</div>
-        <nav className="flex flex-col space-y-2 p-4">
+        <nav className="flex flex-col space-y-2 p-4 ">
             <Link to="/adminDashboard" className="hover:bg-gray-700 p-2 rounded">
                 Dashboard
             </Link>
@@ -74,21 +76,22 @@ const Admin_dashboard :React.FC = () => {
     {/* Main Content Area */}
     <div className="flex-1 flex flex-col">
         {/* Navbar */}
-        <header className="bg-gray-100 shadow p-4 flex justify-between items-center">
+        <header className=" shadow p-4 border-b-2 border-b-slate-300 flex justify-between items-center">
             <div className="text-lg font-bold">Admin Dashboard</div>
             <div>
-                <span className="text-gray-600">Welcome {currentUser?.name}</span>
+                <span className="text-xl font-semibold">Welcome {currentUser?.name}</span>
             </div>
-            <button onClick={()=>{
+            <ModeToggle/>
+            <Button onClick={()=>{
                  localStorage.removeItem('user')
                  window.location.reload()}}
-                 className="bg-red-500 rounded hover:bg-red-600 font-semibold  text-white p-2" >
+                 className=" font-semibold  text-white p-2" >
                 Logout
-            </button>
+            </Button>
         </header>
 
         {/* Main Content */}
-        <main className="p-6 bg-gray-100 flex-1">
+        <main className="p-6 flex-1">
             <Outlet />
         </main>
     </div>

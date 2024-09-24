@@ -8,6 +8,8 @@ import { Provider } from 'react-redux'
 import store from './core/redux/store.ts'
 import SignInForm from './components/organisms/onboarding/signin_form.tsx';
 import SignupForm from './components/organisms/onboarding/signup_form.tsx';
+import Admin_dashboard from './pages/admin_pages/admin_dashboard.tsx';
+import { ThemeProvider } from './components/theme-provider.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,13 @@ const router = createBrowserRouter([
         element:<SignupForm/>
       }
     ]
+  },
+  {
+    path:'/admin',
+    element:(<ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <Admin_dashboard/>
+    </ThemeProvider>
+    )
   }
 ])
 
