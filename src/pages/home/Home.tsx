@@ -1,7 +1,7 @@
 import { CarouselSize } from "@/components/molecules/carousel"
 import Container from "@/components/templates/Container"
 import { Card } from "@/components/ui/card"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
+import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllCategories, selectAllCategories, selectCategoryStatus } from "@/core/redux/slices/category_slice";
 import { fetchCourses, selectAllCourses, selectCoursesError, selectCoursesStatus } from "@/core/redux/slices/course_slice";
