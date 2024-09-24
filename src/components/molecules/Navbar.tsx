@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { ModeToggle } from "../atoms/mode-toggle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../atoms/Logo";
 
 const Navbar: React.FC = () => {
@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+  const naviagte = useNavigate();
   
 
 
@@ -52,6 +53,7 @@ const Navbar: React.FC = () => {
   const toggleSearch = () => setIsSearchOpen((prev) => !prev);
 
   return (
+    
     <nav
       ref={navbarRef}
       className={`w-full tra flex justify-between items-center px-4 sm:px-8 md:px-16 lg:px-32 h-14 shadow-sm shadow-slate-500 transition-all duration-300 ease-in-out overflow-x-hidden ${
@@ -113,7 +115,7 @@ const Navbar: React.FC = () => {
       {/* User or Sign In Button */}
 
       <div>
-      <Button className="system:bg-blue-400 text-xl font-bold">Signin</Button>
+      <Button onClick={()=>naviagte('/signin')} className="system:bg-blue-400 text-xl font-bold">Signin</Button>
       </div>
       </div>
       {/* Search Icon */}

@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './pages/home/Home.tsx'
 import { Provider } from 'react-redux'
 import store from './core/redux/store.ts'
+import SignInForm from './components/organisms/onboarding/signin_form.tsx';
+import SignupForm from './components/organisms/onboarding/signup_form.tsx';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ const router = createBrowserRouter([
       {
         path:'/',
         element:<Home/>
+      },
+      {
+        path:'/signin',
+        element:<SignInForm/>
+      },
+      {
+        path:'/signup',
+        element:<SignupForm/>
       }
     ]
   }
