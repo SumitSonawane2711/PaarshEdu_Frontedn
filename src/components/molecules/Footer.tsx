@@ -3,7 +3,7 @@ import Logo from "../atoms/Logo";
 
 function Footer() {
   return (
-    <footer className="bg-[#020e31] border-t-2 border-t-black py-10">
+    <footer className=" border-t bg-[#050914] border-slate-400 py-10">
       <div className="container mx-auto px-8 sm:px-20">
         {/* Footer Top Section */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-10">

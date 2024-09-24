@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@/core/redux/store";
+import { Button } from "../ui/button";
+import { ModeToggle } from "../atoms/mode-toggle";
+import { Link } from "react-router-dom";
 import Logo from "../atoms/Logo";
 
 const Navbar: React.FC = () => {
@@ -10,8 +10,7 @@ const Navbar: React.FC = () => {
   const navbarRef = useRef<HTMLDivElement>(null);
   const [isFixed, setIsFixed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-  const navigate = useNavigate()
-  const currentUser = useSelector((state: RootState) => state.users)
+  
 
 
   useEffect(() => {
@@ -55,15 +54,16 @@ const Navbar: React.FC = () => {
   return (
     <nav
       ref={navbarRef}
-      className={`w-full flex justify-between bg-white items-center px-4 sm:px-8 md:px-16 lg:px-32 h-14 shadow-md  transition-all duration-300 ease-in-out ${isFixed ? "fixed top-0 left-0 w-full z-50" : ""
-        }`}
+      className={`w-full tra flex justify-between items-center px-4 sm:px-8 md:px-16 lg:px-32 h-14 shadow-sm shadow-slate-500 transition-all duration-300 ease-in-out overflow-x-hidden ${
+        isFixed ? "fixed top-0 left-0 w-full z-50" : ""
+      } bg-white dark:bg-[#050914]`} // Set background color to white (or any other color)
     >
       <Link
         to="/"
         className={`transition-all duration-300 ease-in-out ${isSearchOpen && isMobile ? "hidden" : ""
           }`}
       >
-        <div className="flex items-center">
+        <div className="flex items-center"> 
           <Logo width="150px" className="sm:w-32 md:w-40 lg:w-48" />
         </div>
       </Link>
@@ -89,12 +89,12 @@ const Navbar: React.FC = () => {
             }}
           />
         </div>
-        {/* User or Sign In Button */}
+        
       
       <div className="flex gap-4 items-center">
       <svg
         onClick={toggleSearch}
-        className="cursor-pointer h-8 w-8 hover:bg-gray-200 bg-slate-100 rounded-full text-blue-800 p-1"
+        className="cursor-pointer h-8 w-8 dark:bg-[#050914] hover:bg-gray-200 bg-slate-100 rounded-full text-blue-800 p-1"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -108,22 +108,12 @@ const Navbar: React.FC = () => {
         ></path>
       </svg>
 
+      <ModeToggle/>
+
+      {/* User or Sign In Button */}
+
       <div>
-        {currentUser ? (
-          <Link
-            to={"/user"}
-            className="  px-4 py-2 rounded  hover:shadow-lg transition duration-300 transform hover:-translate-y-1"
-          >
-            {/* {currentUser?.} */}
-          </Link>
-        ) : (
-          <button
-            onClick={() => navigate("/signin")}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 hover:shadow-lg transition duration-300 transform hover:-translate-y-1"
-          >
-            Sign In
-          </button>
-        )}
+      <Button className="system:bg-blue-400 text-xl font-bold">Signin</Button>
       </div>
       </div>
       {/* Search Icon */}

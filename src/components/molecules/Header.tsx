@@ -8,7 +8,7 @@ import {
   
   const Header = () => {
     return (
-      <header className="bg-black w-screen overflow-hidden">
+      <header className="bg-black  overflow-x-hidden">
         <div className="flex flex-col md:flex-row px-4 md:px-20 justify-between items-center my-2 pb-2">
           <div className="text-white w-full md:w-auto flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 rounded-lg">
             <div className="font-bold">Contact:</div>
