@@ -29,7 +29,7 @@ const Edit_course = () => {
     dispatch(fetchCourses());
     dispatch(getAllInstrucotrs());
     dispatch(getAllCategories());
-  }, [dispatch]);
+  },[dispatch]);
 
 
   const currentCourses = courses.slice(

@@ -95,12 +95,12 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
     <>
       <Dialog open={isOpen} onOpenChange={setIsopen} >
                 <DialogTrigger asChild>
-                    {instructor ? <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
+                    {!instructor ? <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
                         : <FaEdit />}
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{instructor? "ADD category" : "Update category"}</DialogTitle>
+                        <DialogTitle>{!instructor? "ADD category" : "Update category"}</DialogTitle>
                         <DialogDescription>
                             Make changes to your instructor here. Click save when you're done.
                         </DialogDescription>

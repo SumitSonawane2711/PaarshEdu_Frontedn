@@ -43,7 +43,7 @@ import { addCourse, updateCourse } from "@/core/redux/slices/course_slice"
 import { selectAllInstructors } from "@/core/redux/slices/instructor_slice"
 import { useToast } from "@/hooks/use-toast"
 import { selectAllCategories } from "@/core/redux/slices/category_slice"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AppDispatch } from "@/core/redux/store"
 import { FaEdit } from "react-icons/fa"
 import { Course } from "@/core/types/courses"
@@ -73,12 +73,28 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const [isOpen, setIsOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   type Course = z.infer<typeof formSchema>;
   const [formData, setFormData] = useState<Course | null>(null); // To hold form data before confirmation
   
   console.log("course:",course);
   
+  useEffect(() => {
+    if (course?.imageUrl) {
+      setImagePreview(course.imageUrl); // Assume courseImageUrl is the URL from backend
+    }
+  }, [course]);
+
+  // Handle image selection for preview
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Generate a URL for the selected image file
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl); // Update the state to display the preview
+    }
+  };
 
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -377,20 +393,36 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                 )}
               />
 
-              {/* Course Image */}
-              <FormField
-                control={form.control}
-                name="courseImage"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Course Image</FormLabel>
-                    <FormControl>
-                      <Input type="file" onChange={(e) => field.onChange(e.target.files?.[0])} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Image Upload Field */}
+        <FormField
+          name="courseImage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Course Image</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  onChange={(e) => {
+                    field.onChange(e.target.files?.[0]); // Update form value
+                    handleImageChange(e); // Show preview
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Image Preview */}
+        {imagePreview && (
+          <div className="mt-4">
+            <img
+              src={imagePreview}
+              alt="Course Preview"
+              className="w-40 h-40 object-cover"
+            />
+          </div>
+          )}
 
               {/* Description */}
               <FormField

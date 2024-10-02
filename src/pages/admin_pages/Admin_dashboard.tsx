@@ -1,24 +1,14 @@
 import { ModeToggle } from '@/components/atoms/mode-toggle';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster'
-import { getAllCategories } from '@/core/redux/slices/category_slice';
-import { fetchCourses } from '@/core/redux/slices/course_slice';
-import { getAllInstrucotrs } from '@/core/redux/slices/instructor_slice';
-import { AppDispatch, RootState } from '@/core/redux/store';
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/core/redux/store';
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 
 const Admin_dashboard :React.FC = () => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const currentUser = useSelector((state: RootState) => state.users.user)
-    const dispatch = useDispatch<AppDispatch>();
-    
-    useEffect(() => {
-        dispatch(fetchCourses());
-        dispatch(getAllCategories())
-        dispatch(getAllInstrucotrs())
-      }, []);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
