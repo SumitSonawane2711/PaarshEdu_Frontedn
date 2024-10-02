@@ -12,7 +12,7 @@ const ProtectedRoute = ({ redirectTo, requiredRoles = [],children }: ProtectedRo
 
   const currentUser = useSelector((state: RootState) => state.users.user)
   const isLoggedIn = currentUser !== null
-  const role = currentUser?.role || "";
+  const role = currentUser?.role ?? 'unknown';
   // console.log("currentUser :", currentUser);
 
 
@@ -21,7 +21,7 @@ const ProtectedRoute = ({ redirectTo, requiredRoles = [],children }: ProtectedRo
   //   }
 
     if (!isLoggedIn) {
-      return <Navigate to={redirectTo??'/login'} />
+      return <Navigate to={redirectTo??'/signin'} />
     }
 
   if (!requiredRoles.includes(role)) {

@@ -9,7 +9,6 @@ import { AppDispatch } from "@/core/redux/store";
 import { LucideCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 const benefits = [
   {
     title: "Hands-on Training",
@@ -320,10 +319,10 @@ const Home = () => {
           </div>
         </Container>
 
-      </div>
+      </div>        
 
       {/* Our Achievements */}
-      <Container>
+      <Container >
         <div className="mt-10 mb-10 items-center justify-center">
           <div className="flex flex-col items-center p-10">
             <h1 className=" text-center font-bold text-4xl sm:text-5xl py-4">
