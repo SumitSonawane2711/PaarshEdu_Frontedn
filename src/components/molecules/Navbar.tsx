@@ -70,8 +70,6 @@ const Navbar: React.FC = () => {
         </div>
       </Link>
 
-     
-
         {/* Search Input with Right to Left Animation */}
         <div
           ref={searchRef}
@@ -113,10 +111,9 @@ const Navbar: React.FC = () => {
       <ModeToggle/>
 
       {/* User or Sign In Button */}
-
-      <div>
-      <Button onClick={()=>naviagte('/signin')} className="system:bg-blue-400 text-xl font-bold">Signin</Button>
-      </div>
+      
+      <Button onClick={()=>naviagte('/signin')} className="text-white font-bold">Signin</Button>
+      
       </div>
       {/* Search Icon */}
       

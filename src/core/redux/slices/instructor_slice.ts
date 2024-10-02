@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { Instructor, InstructorState } from "@/core/types/user";
+import {  Instructor, InstructorState } from "@/core/types/user";
 
 
 //fetch all instrucotrs

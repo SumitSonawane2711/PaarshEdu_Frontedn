@@ -12,6 +12,6 @@ export const signupSchema = z.object({
 
 
 export const loginSchema = z.object({
-    email: z.string().email(),
+    email: z.string().min(2, { message: "mail is required" }),
     password: z.string().min(8),
 });

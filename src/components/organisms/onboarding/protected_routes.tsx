@@ -13,7 +13,7 @@ const ProtectedRoute = ({ redirectTo, requiredRoles = [],children }: ProtectedRo
   const currentUser = useSelector((state: RootState) => state.users.user)
   const isLoggedIn = currentUser !== null
   const role = currentUser?.role ?? 'unknown';
-  console.log("currentUser :", currentUser);
+  // console.log("currentUser :", currentUser);
 
 
   //   if(isAdmin){

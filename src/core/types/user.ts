@@ -13,7 +13,7 @@ export interface User {
   }  
 
   export interface Instructor {
-    id:number,
+    id:number;
     name:string;
     email:string;
   }

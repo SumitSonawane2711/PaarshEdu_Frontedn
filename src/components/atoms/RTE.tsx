@@ -1,15 +1,15 @@
 import { Editor } from '@tinymce/tinymce-react';
 import { useRef } from 'react';
-import { Controller, Control } from 'react-hook-form';
+import { Controller,  } from 'react-hook-form';
 
 interface RTEProps {
   name: string;
-  control: Control;
+  
   label?: string;
   defaultValue?: string;
 }
 
-export default function RTE({ name, control, label, defaultValue = "" }: RTEProps) {
+export default function RTE({ name, label, defaultValue = "" }: RTEProps) {
   const editorRef = useRef(null);
 
   return (
@@ -18,7 +18,7 @@ export default function RTE({ name, control, label, defaultValue = "" }: RTEProp
       
       <Controller
         name={name}
-        control={control}
+        
         defaultValue={defaultValue}
         render={({ field: { onChange, value } }) => (
           <Editor

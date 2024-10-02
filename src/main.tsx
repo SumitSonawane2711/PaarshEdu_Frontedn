@@ -15,6 +15,7 @@ import Edit_course from './pages/admin_pages/edit_course.tsx';
 import Edit_categories from './pages/admin_pages/edit_categories.tsx';
 import Edit_instructor from './pages/admin_pages/edit_instructor.tsx';
 import Edit_users from './pages/admin_pages/edit_users.tsx';
+import Form from './pages/admin_pages/admin_compnents/course_form.tsx';
 
 const router = createBrowserRouter([
   {
@@ -76,7 +77,15 @@ const router = createBrowserRouter([
             <Edit_users/>
           </ProtectedRoute>
         )
-      }
+      },
+      {
+        path: 'form',
+        element: (
+          <ProtectedRoute redirectTo="/signin" requiredRoles={['admin']} >
+            <Form/>
+          </ProtectedRoute>
+        )
+      },
     ]
   }
 ])

@@ -3,10 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster'
 import { getAllCategories } from '@/core/redux/slices/category_slice';
 import { fetchCourses } from '@/core/redux/slices/course_slice';
+import { getAllInstrucotrs } from '@/core/redux/slices/instructor_slice';
 import { AppDispatch, RootState } from '@/core/redux/store';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom';
 
 const Admin_dashboard :React.FC = () => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -16,7 +17,8 @@ const Admin_dashboard :React.FC = () => {
     useEffect(() => {
         dispatch(fetchCourses());
         dispatch(getAllCategories())
-      }, [dispatch]);
+        dispatch(getAllInstrucotrs())
+      }, []);
 
     const toggleDropdown = () => {
         setDropdownOpen(!isDropdownOpen);
@@ -28,13 +30,13 @@ const Admin_dashboard :React.FC = () => {
     <aside className="w-64 border-r-2 border-slate-300">
         <div className="p-4 text-xl font-bold">Admin Panel</div>
         <nav className="flex flex-col space-y-2 p-4 ">
-            <Link to="/adminDashboard" className="hover:bg-gray-700 p-2 rounded">
+            <Link to="/adminDashboard" className="hover:bg-blue-600 p-2 rounded">
                 Dashboard
             </Link>
             <div className="relative">
                 <button
                     onClick={toggleDropdown}
-                    className="w-full text-left hover:bg-gray-700 p-2 rounded flex justify-between items-center"
+                    className="w-full text-left hover:bg-blue-600 p-2 rounded flex justify-between items-center"
                 >
                     Courses
                     <svg
@@ -55,20 +57,23 @@ const Admin_dashboard :React.FC = () => {
                 </button>
                 {isDropdownOpen && (
                     <div className="ml-4 mt-2 space-y-2">
-                        <Link to="/adminDashboard/courses" className="block hover:bg-gray-700 p-2 rounded">
+                        <Link to="/admin/courses" className="block hover:bg-blue-600 p-2 rounded">
                             Courses
                         </Link>
-                        <Link to="/adminDashboard/categories" className="block hover:bg-gray-700 p-2 rounded">
+                        <Link to="/admin/categories" className="block hover:bg-blue-600 p-2 rounded">
                             Categories
                         </Link>
-                        <Link to="/adminDashboard/instructor" className="block hover:bg-gray-700 p-2 rounded">
+                        <Link to="/admin/instructor" className="block hover:bg-blue-600 p-2 rounded">
                             Instructors
                         </Link>
                     </div>
                 )}
             </div>
-            <Link to="/adminDashboard/users" className="hover:bg-gray-700 p-2 rounded">
+            <Link to="/admin/users" className="hover:bg-blue-600 p-2 rounded">
                 Users
+            </Link>
+            <Link to="/admin/form" className="hover:bg-blue-600 p-2 rounded">
+                Form
             </Link>
         </nav>
     </aside>
@@ -76,11 +81,12 @@ const Admin_dashboard :React.FC = () => {
     {/* Main Content Area */}
     <div className="flex-1 flex flex-col">
         {/* Navbar */}
-        <header className=" shadow p-4 border-b-2 border-b-slate-300 flex justify-between items-center">
-            <div className="text-lg font-bold">Admin Dashboard</div>
+        <header className=" shadow p-3 px-5 border-b-2 border-b-slate-300 flex justify-between items-center">
+            <div className="text-lg font-bold ">Admin Dashboard</div>
             <div>
                 <span className="text-xl font-semibold">Welcome {currentUser?.name}</span>
             </div>
+            <div className='flex gap-2'>
             <ModeToggle/>
             <Button onClick={()=>{
                  localStorage.removeItem('user')
@@ -88,6 +94,8 @@ const Admin_dashboard :React.FC = () => {
                  className=" font-semibold  text-white p-2" >
                 Logout
             </Button>
+            </div>
+            
         </header>
 
         {/* Main Content */}
