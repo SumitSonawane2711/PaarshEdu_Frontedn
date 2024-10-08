@@ -64,29 +64,26 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                         description: "The Category has been successfully updated.",
                         className: "bg-green-500 text-white",
                     });
+                    window.location.reload();
                 }
 
             } else {
                 const response = await dispatch(createCategory(formData)).unwrap()
 
-                if (!response) {
+                if (response) {
                     toast({
                         title: "Category added successfully!",
                         description: "The Category has been successfully added.",
                         className: "bg-green-500 text-white",
                     });
+                    window.location.reload();
                 }
-                toast({
-                    title: "Category added successfully!",
-                    description: "The Category has been successfully added.",
-                    className: "bg-green-500 text-white",
-                });
+
             }
-
-
 
             setIsConfirmOpen(false);
             setIsopen(false);
+            
         } catch (error) {
             console.log(error);
             toast({

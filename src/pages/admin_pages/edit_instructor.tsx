@@ -13,11 +13,11 @@ import { Toaster } from '@/components/ui/toaster';
 import { AppDispatch } from '@/core/redux/store';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog } from '@radix-ui/react-alert-dialog';
-import {  useState } from 'react'
-import {  FaEye, FaTrash } from 'react-icons/fa';
+import {  useEffect, useState } from 'react'
+import {  FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { deleteInstructor, selectAllInstructors } from '@/core/redux/slices/instructor_slice';
+import { deleteInstructor, getAllInstrucotrs, selectAllInstructors } from '@/core/redux/slices/instructor_slice';
 import Instructor_form from './admin_compnents/instructor_form';
 
 
@@ -44,6 +44,10 @@ const Edit_instructor = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
+
+  useEffect(() => {
+    dispatch(getAllInstrucotrs());
+  },[dispatch]);
 
   const handleDelete = async () => {
     if (selectedCourseId === null) return;
@@ -76,7 +80,7 @@ const Edit_instructor = () => {
   return (
     <div className="">
     <div className="flex justify-between px-2 items-center mb-4">
-      <h1 className="text-2xl font-bold">Categories</h1>
+      <h1 className="text-2xl font-bold">Instructor</h1>
       <div>
         <Instructor_form/>
       </div>
@@ -109,7 +113,6 @@ const Edit_instructor = () => {
                 
                 <td className="p-4 border-b border-gray-200 ">
                   <div className='flex gap-2 justify-center'>
-                    <FaEye/>
                     <Instructor_form instructor={instructor}/>
                     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                       <AlertDialogTrigger asChild>

@@ -30,7 +30,7 @@ const ViewCourse : React.FC<ViewCourseProps>= ({courseId}) => {
         
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <FaEye />
+                <FaEye className="text-blue-500  hover:text-blue-700 cursor-pointer"/>
             </AlertDialogTrigger>
             <AlertDialogContent className="sm:max-w-5xl max-h-[80vh] overflow-y-auto transform">
                 <AlertDialogHeader>

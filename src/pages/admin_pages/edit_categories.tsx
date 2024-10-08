@@ -10,12 +10,12 @@ import { AlertDialogAction,
         } from '@/components/ui/alert-dialog';
         
 import { Toaster } from '@/components/ui/toaster';
-import {  deleteCategory, selectAllCategories } from '@/core/redux/slices/category_slice';
+import {  deleteCategory, getAllCategories, selectAllCategories } from '@/core/redux/slices/category_slice';
 import { AppDispatch } from '@/core/redux/store';
 import { useToast } from '@/hooks/use-toast';
 import { AlertDialog } from '@radix-ui/react-alert-dialog';
-import {  useState } from 'react'
-import { FaEye, FaTrash } from 'react-icons/fa';
+import {  useEffect, useState } from 'react'
+import {  FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import Category_form from './admin_compnents/category_form';
 
@@ -71,7 +71,10 @@ const Edit_categories = () => {
       toast({ title: "Category deletion failed", description: errorMessage });
     }
   };
-
+  
+  useEffect(() => {
+    dispatch(getAllCategories());
+  },[dispatch]);
 
   return (
     <div className="">
@@ -109,7 +112,6 @@ const Edit_categories = () => {
                 
                 <td className="p-4 border-b border-gray-200 ">
                   <div className='flex gap-2 justify-center'>
-                    <FaEye/>
                     <Category_form category={category}/>
                     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                       <AlertDialogTrigger asChild>
