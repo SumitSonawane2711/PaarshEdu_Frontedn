@@ -39,18 +39,37 @@ export const loginUser = createAsyncThunk<User, LoginInput>(
     }
 );
 
-// // logout user
-// export const logoutUser: any = createAsyncThunk<User>(
-//     'user/logout',
-//     async (_,thunkAPI)=>{
-//         try {
-//             const response = await axios.post('api/v1/user/logout');
-//             return null;
-//         } catch (error) {
-//             return thunkAPI.rejectWithValue(error.response?.data || 'failed to logout')
-//         }
-//     }
-// );
+export const deleteUser = createAsyncThunk<number,number>(
+    'user/delete',
+    async(userId,thunkAPI) => {
+        try {
+            console.log("userId :",userId);
+            
+            const response = await axios.post(`http://localhost:3000/api/v1/courses/deleteuser/${userId}`)
+            return response.data;
+        } catch (error) {
+            const typedError = error as AxiosError;
+            return thunkAPI.rejectWithValue(typedError.response?.data || 'fail to delete instructor')
+        }
+    }
+);
+
+export const updateUser  = createAsyncThunk<User,{ userData: Partial<User> }>(  
+    "user/update",
+    async(userData,thunkAPI) => {        
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/v1/courses/updateUser",
+                userData
+              );
+              
+              return response.data;
+        } catch (error){
+            const typedError = error as AxiosError;
+            return thunkAPI.rejectWithValue(typedError.response?.data || "failed to update instructor")
+        }
+    }
+)
 
 const initialState: UserState = {
     user: JSON.parse(localStorage.getItem('user') || 'null'), // Load user from localStorage
@@ -92,7 +111,19 @@ const initialState: UserState = {
           .addCase(loginUser.rejected, (state, action) => {
              state.status = 'failed';
              state.error = action.error.message || 'Failed to login';
-          });
+          })
+          .addCase(updateUser.pending, (state) => {
+            state.status = 'loading';
+         })
+         .addCase(updateUser.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.user = action.payload;
+            localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
+         })
+         .addCase(updateUser.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message || 'Failed to update';
+         })         
     },
  });
  

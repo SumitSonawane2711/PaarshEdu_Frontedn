@@ -3,6 +3,9 @@ import { Button } from "../ui/button";
 import { ModeToggle } from "../atoms/mode-toggle";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../atoms/Logo";
+import { useSelector } from "react-redux";
+import { RootState } from "@/core/redux/store";
+import { selectIsLoggedIn } from "@/core/redux/slices/user_slice";
 
 const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -11,7 +14,8 @@ const Navbar: React.FC = () => {
   const [isFixed, setIsFixed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const naviagte = useNavigate();
-  
+  const currentUser = useSelector((state:RootState)=>state.users.user)
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
 
   useEffect(() => {
@@ -112,7 +116,10 @@ const Navbar: React.FC = () => {
 
       {/* User or Sign In Button */}
       
+      {currentUser ? <Link to={'/user'}>{currentUser?.name}</Link> 
+      :
       <Button onClick={()=>naviagte('/signin')} className="text-white font-bold">Signin</Button>
+      }
       
       </div>
       {/* Search Icon */}

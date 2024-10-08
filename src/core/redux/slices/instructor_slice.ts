@@ -45,10 +45,8 @@ export const deleteInstructor = createAsyncThunk<number,number>(
     }
 );
 
-export const updateInstructor  = createAsyncThunk<
-Instructor,
-{ instructorData: Partial<Instructor> }
->(  "instructor/update",
+export const updateInstructor  = createAsyncThunk<Instructor,{ instructorData: Partial<Instructor> }>(  
+    "instructor/update",
     async(instructorData,thunkAPI) => {
         console.log("instructorData :",instructorData);
         

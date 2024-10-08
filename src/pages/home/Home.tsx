@@ -1,4 +1,4 @@
-import { CarouselSize } from "@/components/molecules/carousel"
+import { CarouselSize } from "@/components/molecules/carousel";
 import Container from "@/components/templates/Container"
 import { Card } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
@@ -7,7 +7,7 @@ import { getAllCategories, selectAllCategories, selectCategoryStatus } from "@/c
 import { fetchCourses, selectAllCourses, selectCoursesError, selectCoursesStatus } from "@/core/redux/slices/course_slice";
 import { AppDispatch } from "@/core/redux/store";
 import { LucideCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 const benefits = [
   {
@@ -122,7 +122,7 @@ const Home = () => {
     if (currentCategory) {
       setCategoryId(currentCategory.id);
     }
-  }, [activeCategory, categories]);
+  }, [activeCategory,categories]);
 
   const navItems = categories?.map((category) => ({
     name: category.name,
@@ -130,31 +130,35 @@ const Home = () => {
     categoryId: category.id,
   }));
 
-  const products = courses
-    .filter((course) => course.categoryId === categoryId)
-    .map((course) => ({
-      id: course.id,
-      description: course.description,
-      name: course.title || "Data Analyst Master Course",
-      href: `/product-detail/${course.id}`,
-      imageSrc: course.imageUrl,
-      discountPrice: course.price,
-      originalPrice: 1000,
-    }));
+  const products = useMemo(
+    () => courses
+      .filter(course => course.categoryId === categoryId)
+      .map(course => ({
+        id: course.id,
+        description: course.description,
+        name: course.title || "Data Analyst Master Course",
+        href: `/product-detail/${course.id}`,
+        imageSrc: course.imageUrl || "https://learn.g2.com/hs-fs/hubfs/Screen%20Shot%202020-01-24%20at%208.01.03%20AM.png",
+        discountPrice: course.price,
+        originalPrice: 1000,
+      })),
+    [categoryId,courses]
+  );
 
-  const popularCourses = courses
-    .filter((course) => course.price > 200)
-    .map((course) => ({
-      id: course.id,
-      description: course.description,
-      name: course.title || "Data Analyst Master Course",
-      href: `/product-detail/${course.id}`,
-      imageSrc:
-        course.imageUrl ||
-        "https://learn.g2.com/hs-fs/hubfs/Screen%20Shot%202020-01-24%20at%208.01.03%20AM.png?width=555&name=Screen%20Shot%202020-01-24%20at%208.01.03%20AM.png",
-      discountPrice: course.price,
-      originalPrice: 1000,
-    }));
+  const popularCourses = useMemo(
+    () => courses
+      .filter(course => course.price > 200)
+      .map(course => ({
+        id: course.id,
+        description: course.description,
+        name: course.title || "Data Analyst Master Course",
+        href: `/product-detail/${course.id}`,
+        imageSrc: course.imageUrl || "https://learn.g2.com/hs-fs/hubfs/Screen%20Shot%202020-01-24%20at%208.01.03%20AM.png",
+        discountPrice: course.price,
+        originalPrice: 1000,
+      })),
+    [courses]
+  );
 
   return (
     <>
@@ -173,6 +177,7 @@ const Home = () => {
         </div>
       </div>
 
+      {/* carosel navItems */}
       <Container>
         <h1 className=" sm:text-5xl text-3xl font-semibold py-10">Top rated Courses</h1>
         <Carousel
@@ -192,17 +197,16 @@ const Home = () => {
                  className={`flex mx-2 w-max text-white justify-center text-center bg-blue-950 text-2xl font-bold duration-200 cursor-pointer ${activeCategory === category.name
                    ? "underline underline-offset-2"
                    : ""
-                   }  rounded p-1 overflow-hidden text-ellipsis whitespace-nowrap shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]`}
+                   }  rounded p-1 px-2 overflow-hidden text-ellipsis whitespace-nowrap shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]`}
                >
                  {category?.name}
                </Card> : <Skeleton className="h-6 w-full" />}
-               
 
               </div>
             ))}
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
+          <CarouselPrevious className="hidden sm:flex" />
+          <CarouselNext className="hidden sm:flex"/>
         </Carousel>
 
         {/* Tope Rated */}
@@ -253,7 +257,6 @@ const Home = () => {
             ))}
           </div>
         </Container>
-
       </div>
 
       {/* our benefits */}
@@ -338,7 +341,6 @@ const Home = () => {
         </div>
       </Container>
     </>
-
   )
 }
 
