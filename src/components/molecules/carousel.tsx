@@ -35,7 +35,7 @@ interface CarouselSizeProps {
 
 export const CarouselSize = React.memo(({ products = [], status = 'idle', error = "", role = '' }: CarouselSizeProps) => {
 
-    console.log("status :", status);
+    // console.log("status :", status);
 
     const navigate = useNavigate();
 

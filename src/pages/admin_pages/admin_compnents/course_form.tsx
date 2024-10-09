@@ -78,7 +78,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
   type Course = z.infer<typeof formSchema>;
   const [formData, setFormData] = useState<Course | null>(null); // To hold form data before confirmation
 
-  console.log("course:", course);
+  // console.log("course:", course);
 
   useEffect(() => {
     if (course?.imageUrl) {
@@ -119,7 +119,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
     // console.log("data :", formData);
 
     const languagesString = formData?.language?.join(", ") || "";
-    console.log("formdataCID", formData?.categoryId)
+    // console.log("formdataCID", formData?.categoryId)
 
     try {
       const modifiedData = {
@@ -132,8 +132,8 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
 
 
 
-      console.log("formdata: ", formData);
-      console.log("modifiedData: ", modifiedData);
+      // console.log("formdata: ", formData);
+      // console.log("modifiedData: ", modifiedData);
 
 
       //update the course
@@ -146,7 +146,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
           language: languagesString,
           id: course.id
         }
-        console.log("updatedData :", updatedData);
+        // console.log("updatedData :", updatedData);
 
         const response = await dispatch(updateCourse(updatedData)).unwrap();
         if (response) {
@@ -194,7 +194,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen} >
         <DialogTrigger asChild>
-          {course ? <FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" />
+          {course ? <span><FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" /></span>
             : <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
           }
         </DialogTrigger>

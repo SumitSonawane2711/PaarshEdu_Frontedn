@@ -90,7 +90,6 @@ const Edit_course = () => {
             <tr>
               <th className="p-2 border-b border-gray-200">#</th>
               <th className="p-2 border-b border-gray-200">Category</th>
-              <th className="p-2 border-b border-gray-200">Sub Category</th>
               <th className="p-2 border-b border-gray-200">Name</th>
               <th className="p-2 border-b border-gray-200">Type</th>
               <th className="p-2 border-b border-gray-200">Duration (days)</th>
@@ -115,9 +114,6 @@ const Edit_course = () => {
                   </td>
                   <td className="p-2 border-b text-center border-gray-200">
                     {category?.name || "Unknown"}
-                  </td>
-                  <td className="p-2 border-b text-center border-gray-200">
-                    {course.type}
                   </td>
                   <td className="p-2 border-b text-center border-gray-200">
                     {course.title}

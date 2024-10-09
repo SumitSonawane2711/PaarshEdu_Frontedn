@@ -15,8 +15,6 @@ const Navbar: React.FC = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
   const naviagte = useNavigate();
   const currentUser = useSelector((state:RootState)=>state.users.user)
-  const isLoggedIn = useSelector(selectIsLoggedIn);
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

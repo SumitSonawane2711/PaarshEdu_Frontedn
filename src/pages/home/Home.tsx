@@ -249,7 +249,7 @@ const Home = () => {
       >
         <Container>
           <h1 className="text-4xl mb-6 font-bold text-center text-gray-950">
-            Why choose Paarsh <span className="text-blue-800">E-Learning</span>
+            Why choose Paarsh <span className="text-blue-800">EDU Learning</span>
           </h1>
           <div className="grid sm:grid-cols-2 gap-10 my-6 w-full">
             {benefits.map((benefit, index) => (
@@ -332,10 +332,10 @@ const Home = () => {
               Our Achievements
             </h1>
             <p className="font-semibold text-justify text-xl ">
-              Paarsh E-Learning is a start-up based Edutech company from Pune,
+              Paarsh E-EDU is a start-up based Edutech company from Pune,
               Nashik, & Surat. We provide courses for every student willing to
-              start their career in their respective field. Paarsh E-Learning has
-              placed 1000+ candidates in the IT and Non-IT sectors.
+              start their career in their respective field. Paarsh E-EDU has
+              trained 100+ industry ready candidates in the IT and Non-IT sectors.
             </p>
           </div>
         </div>

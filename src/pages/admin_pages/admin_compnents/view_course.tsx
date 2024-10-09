@@ -19,7 +19,7 @@ interface ViewCourseProps {
 }
 
 
-const ViewCourse : React.FC<ViewCourseProps>= ({courseId}) => {
+const ViewCourse: React.FC<ViewCourseProps> = ({ courseId }) => {
     const courses = useSelector(selectAllCourses);
     const categories = useSelector(selectAllCategories);
     const course = courses.find(course => course.id === courseId);
@@ -27,10 +27,12 @@ const ViewCourse : React.FC<ViewCourseProps>= ({courseId}) => {
     const category = categories?.find(cat => cat.id === course?.categoryId);
 
     return (
-        
+
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <FaEye className="text-blue-500  hover:text-blue-700 cursor-pointer"/>
+                <span>
+                    <FaEye className="text-blue-500 hover:text-blue-700 cursor-pointer" />
+                </span>
             </AlertDialogTrigger>
             <AlertDialogContent className="sm:max-w-5xl max-h-[80vh] overflow-y-auto transform">
                 <AlertDialogHeader>

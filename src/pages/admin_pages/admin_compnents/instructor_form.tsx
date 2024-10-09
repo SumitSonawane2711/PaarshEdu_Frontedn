@@ -55,7 +55,7 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
           ...formData,
           id: instructor.id,
         }
-        console.log("instructorData :",updatedData);
+        // console.log("instructorData :",updatedData);
         
         const response = await dispatch(updateInstructor(updatedData)).unwrap();
         setIsopen(false);
@@ -67,10 +67,10 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
         });
         window.location.reload();
         }
-        console.log(response);
+        // console.log(response);
         
       } else {
-        console.log("modifiedData :",modifiedData);
+        // console.log("modifiedData :",modifiedData);
         
         const response = await dispatch(createInstructor(formData)).unwrap()
         setIsopen(false);
@@ -82,7 +82,7 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
           });
           window.location.reload();
       }
-      console.log(response);
+    //   console.log(response);
       }
 
       setIsConfirmOpen(false);
@@ -109,7 +109,7 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
       <Dialog open={isOpen} onOpenChange={setIsopen} >
                 <DialogTrigger asChild>
                     {!instructor ? <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
-                        : <FaEdit />}
+                        : <span><FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" /></span>}
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>

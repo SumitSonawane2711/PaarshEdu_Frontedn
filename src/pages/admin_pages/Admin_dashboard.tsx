@@ -20,7 +20,7 @@ const Admin_dashboard :React.FC = () => {
     <aside className="w-64 border-r-2 border-slate-300">
         <div className="p-4 text-xl font-bold">Admin Panel</div>
         <nav className="flex flex-col space-y-2 p-4 ">
-            <Link to="/adminDashboard" className="hover:bg-blue-600 p-2 rounded">
+            <Link to="/admin" className="hover:bg-blue-600 p-2 rounded">
                 Dashboard
             </Link>
             <div className="relative">
