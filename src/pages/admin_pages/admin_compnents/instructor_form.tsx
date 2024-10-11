@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
@@ -6,12 +6,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useToast } from '@/hooks/use-toast';
 import { AppDispatch } from '@/core/redux/store';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createInstructor, updateInstructor } from '@/core/redux/slices/instructor_slice';
+import { createInstructor, getAllInstrucotrs, updateInstructor } from '@/core/redux/slices/instructor_slice';
 import { FaEdit } from 'react-icons/fa';
 import { Instructor } from '@/core/types/user';
 
@@ -42,38 +42,51 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
       }
   })
 
+   // Update the form when the instructor prop changes  
   const handleConfirm = async ()=> {
     try {
-      const modifiedData = new FormData();
 
-      if (formData?.name) modifiedData.append("name", formData.name);
-      if (formData?.email) modifiedData.append("description",formData.email);
+        const modifiedData:Partial<Instructor> = {
+            ...formData
+        }
 
       if(instructor) {
-        const instructorData:Partial<Instructor> = {
-          ...modifiedData,
+        const updatedData:Partial<Instructor> = {
+          ...formData,
           id: instructor.id,
         }
-        const response = await dispatch(updateInstructor({instructorData})).unwrap();
+        // console.log("instructorData :",updatedData);
+        
+        const response = await dispatch(updateInstructor(updatedData)).unwrap();
+        setIsopen(false);
         if(response){
           toast({
             title: "Instructor updated successfully!",
             description: "The Instructor has been successfully updated.",
             className: "bg-green-500 text-white",
         });
+        window.location.reload();
         }
-
+        // console.log(response);
+        
       } else {
-        const response = await dispatch(createInstructor(modifiedData));
-
+        // console.log("modifiedData :",modifiedData);
+        
+        const response = await dispatch(createInstructor(formData)).unwrap()
+        setIsopen(false);
         if (response) {
           toast({
               title: "Instructor added successfully!",
               description: "The Instructor has been successfully added.",
               className: "bg-green-500 text-white",
           });
+          window.location.reload();
       }
+    //   console.log(response);
       }
+
+      setIsConfirmOpen(false);
+      
 
     } catch (error) {
       console.log(error);
@@ -96,11 +109,11 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
       <Dialog open={isOpen} onOpenChange={setIsopen} >
                 <DialogTrigger asChild>
                     {!instructor ? <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
-                        : <FaEdit />}
+                        : <span><FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" /></span>}
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{!instructor? "ADD category" : "Update category"}</DialogTitle>
+                        <DialogTitle>{!instructor? "ADD Instructor" : "Update Instructor"}</DialogTitle>
                         <DialogDescription>
                             Make changes to your instructor here. Click save when you're done.
                         </DialogDescription>
@@ -115,9 +128,9 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
                                     name='name'
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Category Name</FormLabel>
+                                            <FormLabel>Instructor Name</FormLabel>
                                             <FormControl>
-                                                <Input placeholder='Categry name' {...field} />
+                                                <Input defaultValue={field.name} placeholder='Categry name' {...field} />
                                             </FormControl>
                                         </FormItem>
                                     )}
@@ -136,9 +149,10 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
                                     )}
                                 />
                             </div>
+                            <Button type="submit" >Submit</Button>
                         </form>
                     </Form>
-
+                    
                     <AlertDialogFooter></AlertDialogFooter>
                 </DialogContent>
 

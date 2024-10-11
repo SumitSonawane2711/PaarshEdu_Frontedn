@@ -58,13 +58,13 @@ const Edit_course = () => {
         toast({
           title: "Course Successfully Deleted",
           description: `The course has been successfully removed.`,
-          className: "bg-green-500  z-50 border-none top-2 w-fit p-4 mx-80 rounded shadow-lg",
+          className: "bg-green-500 text-white",
         });
       } else {
         toast({
           title: "Deletion Error",
           description: `There was an issue deleting the course. Please try again.`,
-          className: "bg-red-500 text-white z-50 border-none top-2 w-fit p-4 mx-80 rounded shadow-lg",
+          className: "bg-red-500 text-white ",
         });
       }
     } catch (error) {
@@ -90,7 +90,6 @@ const Edit_course = () => {
             <tr>
               <th className="p-2 border-b border-gray-200">#</th>
               <th className="p-2 border-b border-gray-200">Category</th>
-              <th className="p-2 border-b border-gray-200">Sub Category</th>
               <th className="p-2 border-b border-gray-200">Name</th>
               <th className="p-2 border-b border-gray-200">Type</th>
               <th className="p-2 border-b border-gray-200">Duration (days)</th>
@@ -115,9 +114,6 @@ const Edit_course = () => {
                   </td>
                   <td className="p-2 border-b text-center border-gray-200">
                     {category?.name || "Unknown"}
-                  </td>
-                  <td className="p-2 border-b text-center border-gray-200">
-                    {course.type}
                   </td>
                   <td className="p-2 border-b text-center border-gray-200">
                     {course.title}

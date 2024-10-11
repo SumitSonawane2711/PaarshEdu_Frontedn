@@ -3,12 +3,10 @@ import App from './App.tsx'
 import './index.css'
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Home from './pages/home/Home.tsx'
 import { Provider } from 'react-redux'
 import store from './core/redux/store.ts'
 import SignInForm from './components/organisms/onboarding/signin_form.tsx';
 import SignupForm from './components/organisms/onboarding/signup_form.tsx';
-import Admin_dashboard from './pages/admin_pages/admin_dashboard.tsx';
 import { ThemeProvider } from './components/theme-provider.tsx';
 import ProtectedRoute from './components/templates/Protected-routes.tsx';
 import Edit_course from './pages/admin_pages/edit_course.tsx';
@@ -16,6 +14,14 @@ import Edit_categories from './pages/admin_pages/edit_categories.tsx';
 import Edit_instructor from './pages/admin_pages/edit_instructor.tsx';
 import Edit_users from './pages/admin_pages/edit_users.tsx';
 import Form from './pages/admin_pages/admin_compnents/course_form.tsx';
+import User_dashboard from './pages/user_pages/user_dashboard.tsx';
+import UserProfile from './pages/user_pages/user_profile.tsx';
+import Courses from './pages/user_pages/user_courses.tsx';
+import Admin_dashboard from './pages/admin_pages/Admin_dashboard.tsx';
+import CourseDetails from './pages/home/course_details.tsx';
+import Home from './pages/home/Home.tsx';
+
+// const HomeLazy = React.lazy (()=>import('./pages/home/Home.tsx'))
 
 const router = createBrowserRouter([
   {
@@ -24,7 +30,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />
+        element: <Home/>
       },
       {
         path: '/signin',
@@ -33,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignupForm />
+      },
+      {
+        path:'/course_details/:id',
+        element:<CourseDetails></CourseDetails>
       }
     ]
   },
@@ -87,13 +97,40 @@ const router = createBrowserRouter([
         )
       },
     ]
+  },
+
+  {
+    path: "/user",
+    element: (
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ProtectedRoute redirectTo="/signin" requiredRoles={["user"]}>
+        <User_dashboard />
+      </ProtectedRoute>
+      </ThemeProvider>
+    ),
+    children: [
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute redirectTo="/signin" requiredRoles={["user"]}>
+            <UserProfile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "courses",
+        element: (
+          <ProtectedRoute redirectTo="/signin" requiredRoles={["user"]}>
+            <Courses />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   }
 ])
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode >
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
 );

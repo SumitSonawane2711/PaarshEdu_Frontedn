@@ -55,7 +55,7 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                     id: category.id, 
                   };
                   
-                  console.log("categoryData :",categoryData);
+                //   console.log("categoryData :",categoryData);
                   
                 const response = await dispatch(updateCategory(categoryData)).unwrap();
                 if (response) {
@@ -64,29 +64,26 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                         description: "The Category has been successfully updated.",
                         className: "bg-green-500 text-white",
                     });
+                    window.location.reload();
                 }
 
             } else {
                 const response = await dispatch(createCategory(formData)).unwrap()
 
-                if (!response) {
+                if (response) {
                     toast({
                         title: "Category added successfully!",
                         description: "The Category has been successfully added.",
                         className: "bg-green-500 text-white",
                     });
+                    window.location.reload();
                 }
-                toast({
-                    title: "Category added successfully!",
-                    description: "The Category has been successfully added.",
-                    className: "bg-green-500 text-white",
-                });
+
             }
-
-
 
             setIsConfirmOpen(false);
             setIsopen(false);
+            
         } catch (error) {
             console.log(error);
             toast({
@@ -108,7 +105,7 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
         <>
             <Dialog open={isOpen} onOpenChange={setIsopen} >
                 <DialogTrigger asChild>
-                    {category ? <FaEdit /> 
+                    {category ? <span><FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" /></span>
                       :<Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>}
                 </DialogTrigger>
                 <DialogContent>

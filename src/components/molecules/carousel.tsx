@@ -9,6 +9,11 @@ import {
 import Autoplay from "embla-carousel-autoplay"
 import { FaStar } from "react-icons/fa"
 import { Skeleton } from "../ui/skeleton"
+import { useNavigate } from "react-router-dom"
+import React from "react"
+
+
+
 
 // Define a type for the product prop
 interface Product {
@@ -19,7 +24,6 @@ interface Product {
     imageSrc: string
     description: string
     discountPrice: number
-
 }
 
 interface CarouselSizeProps {
@@ -29,11 +33,11 @@ interface CarouselSizeProps {
     role?: string      // Optional error message
 }
 
-export function CarouselSize({ products = [], status = 'idle', error = "", role = '' }: CarouselSizeProps) {
+export const CarouselSize = React.memo(({ products = [], status = 'idle', error = "", role = '' }: CarouselSizeProps) => {
 
-    console.log("status :", status);
-    console.log("error :", error);
-    console.log("role :", role);
+    // console.log("status :", status);
+
+    const navigate = useNavigate();
 
     if (error) {
         return (
@@ -54,62 +58,63 @@ export function CarouselSize({ products = [], status = 'idle', error = "", role 
         >
             <CarouselContent>
                 {products.map((product) => (
-                    <CarouselItem key={product.id} className="md:basis-1/2 lg:basis-1/4 ">
+                    <CarouselItem onClick={() => navigate(`/course_details/${product.id}`)} key={product.id} className="md:basis-1/2 lg:basis-1/4 ">
                         <div className="p-1 ">
-                            <Card className="">
-                                
-                                {status === 'succeeded' ?
-                                    <CardContent className="aspect-auto border-none px-0 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
-                                        <div className="h-72 rounded ">
-                                            <img
-                                                alt={product.name}
-                                                src={product.imageSrc}
-                                                className="rounded rounded-b-none w-full h-full object-cover"
-                                            />
-                                        </div>
+                            <Card className="h-full">
+                                <CardContent className="aspect-auto border-none p-0  shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.3)_0px_3px_7px_-3px]">
+                                    {status === 'idle' || status === 'loading' || status === 'failed' ?
+                                       (<>
+                                            <Skeleton className="h-72 w-full rounded rounded-b-none" />
+                                            <div className="space-y-2 m-4">
+                                                <Skeleton className="h-6 w-full" />
+                                                <Skeleton className="h-4 w-full" />
+                                            </div>
+                                        </>):
+                                        (<>
+                                            <div className="h-72 rounded ">
+                                                <img
+                                                    alt={product.name}
+                                                    src={product.imageSrc}
+                                                    className="rounded rounded-b-none w-full h-full object-cover"
+                                                />
+                                            </div>
 
-                                        <div className="p-3 ">
-                                            <h3 className="text-lg font-bold text-ellipsis overflow-hidden line-clamp-1">
-                                                {product.name}
-                                            </h3>
-                                            <p className="text-md py-2">
-                                                ₹{product.originalPrice}
-                                                {product.originalPrice && (
-                                                    <span className="ml-3 text-gray-600 line-through">
-                                                        ₹{product.originalPrice}
-                                                    </span>
-                                                )}
-                                            </p>
-                                            {role === "topRated" ?
-                                                <div className="flex my-1">
-                                                    {Array.from({ length: 5 }, (_, starIndex) => (
-                                                        <FaStar
-                                                            key={starIndex}
-                                                            className={`text-md ${starIndex < 3
-                                                                ? "text-yellow-500"
-                                                                : "text-gray-300"
-                                                                }`}
-                                                        />
-                                                    ))}
-                                                </div> : ''}
-
-                                        </div>
-                                    </CardContent>
-                                    : <CardContent className="aspect-auto p-0">
-                                        <Skeleton className="h-72 w-full rounded rounded-b-none" />
-                                        <div className="space-y-2 m-4">
-                                            <Skeleton className="h-6 w-full" />
-                                            <Skeleton className="h-4 w-full" />
-                                        </div>
-                                    </CardContent>
-                                }
+                                            <div className="p-3 rounded-b-lg">
+                                                <h3 className="text-lg font-bold text-ellipsis overflow-hidden line-clamp-1">
+                                                    {product.name}
+                                                </h3>
+                                                <p className="text-md py-2">
+                                                    ₹{product.originalPrice}
+                                                    {product.originalPrice && (
+                                                        <span className="ml-3 text-gray-600 line-through">
+                                                            ₹{product.originalPrice}
+                                                        </span>
+                                                    )}
+                                                </p>
+                                                {role === "topRated" ?
+                                                    <div className="flex my-1">
+                                                        {Array.from({ length: 5 }, (_, starIndex) => (
+                                                            <FaStar
+                                                                key={starIndex}
+                                                                className={`text-md ${starIndex < 3
+                                                                    ? "text-yellow-500"
+                                                                    : "text-gray-300"
+                                                                    }`}
+                                                            />
+                                                        ))}
+                                                    </div> : ''}
+                                            </div>
+                                        </>)
+                                        
+                                        }
+                                </CardContent>
                             </Card>
                         </div>
                     </CarouselItem>
                 ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className='hidden sm:flex' />
+            <CarouselNext className='hidden sm:flex' />
         </Carousel>
     )
-}
+})

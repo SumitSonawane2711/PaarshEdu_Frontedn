@@ -5,7 +5,6 @@ import Navbar from "./components/molecules/Navbar"
 import { ThemeProvider } from "./components/theme-provider"
 import { Toaster } from "./components/ui/toaster"
 import Footer from "./components/molecules/Footer"
-
 function  App() {
 
   return (

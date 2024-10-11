@@ -20,7 +20,7 @@ const Admin_dashboard :React.FC = () => {
     <aside className="w-64 border-r-2 border-slate-300">
         <div className="p-4 text-xl font-bold">Admin Panel</div>
         <nav className="flex flex-col space-y-2 p-4 ">
-            <Link to="/adminDashboard" className="hover:bg-blue-600 p-2 rounded">
+            <Link to="/admin" className="hover:bg-blue-600 p-2 rounded">
                 Dashboard
             </Link>
             <div className="relative">
@@ -62,9 +62,6 @@ const Admin_dashboard :React.FC = () => {
             <Link to="/admin/users" className="hover:bg-blue-600 p-2 rounded">
                 Users
             </Link>
-            <Link to="/admin/form" className="hover:bg-blue-600 p-2 rounded">
-                Form
-            </Link>
         </nav>
     </aside>
 
@@ -77,6 +74,7 @@ const Admin_dashboard :React.FC = () => {
                 <span className="text-xl font-semibold">Welcome {currentUser?.name}</span>
             </div>
             <div className='flex gap-2'>
+            <Link to={'/'} className='p-2'>Home</Link>
             <ModeToggle/>
             <Button onClick={()=>{
                  localStorage.removeItem('user')

@@ -43,7 +43,7 @@ import { addCourse, updateCourse } from "@/core/redux/slices/course_slice"
 import { selectAllInstructors } from "@/core/redux/slices/instructor_slice"
 import { useToast } from "@/hooks/use-toast"
 import { selectAllCategories } from "@/core/redux/slices/category_slice"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AppDispatch } from "@/core/redux/store"
 import { FaEdit } from "react-icons/fa"
 import { Course } from "@/core/types/courses"
@@ -64,10 +64,10 @@ const formSchema = z.object({
 });
 
 interface CourseFormProp {
-  course?: Course ;
+  course?: Course;
 }
 
-const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
+const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
   const categories = useSelector(selectAllCategories);
   const instructors = useSelector(selectAllInstructors);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -77,9 +77,9 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
 
   type Course = z.infer<typeof formSchema>;
   const [formData, setFormData] = useState<Course | null>(null); // To hold form data before confirmation
-  
-  console.log("course:",course);
-  
+
+  // console.log("course:", course);
+
   useEffect(() => {
     if (course?.imageUrl) {
       setImagePreview(course.imageUrl); // Assume courseImageUrl is the URL from backend
@@ -102,7 +102,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
     defaultValues: {
       categoryId: course?.categoryId.toString() || "",
       title: course?.title || "",
-      duration: course?.duration !== null && course?.duration.toString()   || "",
+      duration: course?.duration !== null && course?.duration.toString() || "",
       price: course?.price.toString() || "",
       language: course?.language ? course.language.split(", ") : [],
       level: course?.level || "",
@@ -119,35 +119,35 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
     // console.log("data :", formData);
 
     const languagesString = formData?.language?.join(", ") || "";
-    console.log("formdataCID",formData?.categoryId)
+    // console.log("formdataCID", formData?.categoryId)
 
-     try {
-      const modifiedData= {
+    try {
+      const modifiedData = {
         ...formData,
-        categoryId:parseInt(formData?.categoryId || "0",10),
-        instructorId:parseInt(formData?.instructorId || "0",10),
-        duration:parseInt(formData?.duration || "0",10),
-        language:languagesString
+        categoryId: parseInt(formData?.categoryId || "0", 10),
+        instructorId: parseInt(formData?.instructorId || "0", 10),
+        duration: parseInt(formData?.duration || "0", 10),
+        language: languagesString
       }
-    
 
 
-    console.log("formdata: ", formData);
-    console.log("modifiedData: ", modifiedData);
-    
+
+      // console.log("formdata: ", formData);
+      // console.log("modifiedData: ", modifiedData);
+
 
       //update the course
       if (course) {
-        const updatedData= {
+        const updatedData = {
           ...formData,
-          categoryId:parseInt(formData?.categoryId || "0",10),
-          instructorId:parseInt(formData?.instructorId || "0",10),
-          duration:parseInt(formData?.duration || "0",10),
-          language:languagesString,
-          id:course.id
+          categoryId: parseInt(formData?.categoryId || "0", 10),
+          instructorId: parseInt(formData?.instructorId || "0", 10),
+          duration: parseInt(formData?.duration || "0", 10),
+          language: languagesString,
+          id: course.id
         }
-        console.log("updatedData :",updatedData);
-                
+        // console.log("updatedData :", updatedData);
+
         const response = await dispatch(updateCourse(updatedData)).unwrap();
         if (response) {
           toast({
@@ -155,6 +155,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
             description: "The course information has been updated successfully.",
             className: "bg-green-500 text-white",
           });
+          window.location.reload();
         }
       } else {
         const response = await dispatch(addCourse(modifiedData)).unwrap();
@@ -165,6 +166,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
             description: "The course has been successfully added.",
             className: "bg-green-500 text-white",
           });
+          window.location.reload();
         }
       }
 
@@ -188,12 +190,11 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
     setIsConfirmOpen(true);
   }
 
-
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen} >
         <DialogTrigger asChild>
-          {course ? <FaEdit />
+          {course ? <span><FaEdit className="text-green-500  hover:text-green-700 cursor-pointer" /></span>
             : <Button variant="outline" className='text-lg text-white bg-blue-600'>ADD</Button>
           }
         </DialogTrigger>
@@ -216,7 +217,8 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                     <FormItem>
                       <FormLabel>Course Category</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange}>
+                        <Select onValueChange={field.onChange}
+                          defaultValue={field.value?.toString()}>
                           <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
@@ -243,7 +245,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                     <FormItem>
                       <FormLabel>Course Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Course name" {...field} />
+                        <Input placeholder="Course name" {...field} defaultValue={"title"} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -323,7 +325,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                     <FormItem>
                       <FormLabel>Level</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange}>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select a level" />
                           </SelectTrigger>
@@ -349,7 +351,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                     <FormItem>
                       <FormLabel>Course Type</FormLabel>
                       <FormControl>
-                        <Select onValueChange={field.onChange}>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger className="w-[180px]">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
@@ -375,7 +377,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                   <FormItem>
                     <FormLabel>Course Instructor</FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
                         <SelectTrigger className="w-[180px]">
                           <SelectValue placeholder="Select instructor" />
                         </SelectTrigger>
@@ -394,35 +396,35 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
               />
 
               {/* Image Upload Field */}
-        <FormField
-          name="courseImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Course Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  onChange={(e) => {
-                    field.onChange(e.target.files?.[0]); // Update form value
-                    handleImageChange(e); // Show preview
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              <FormField
+                name="courseImage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Course Image</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        onChange={(e) => {
+                          field.onChange(e.target.files?.[0]); // Update form value
+                          handleImageChange(e); // Show preview
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        {/* Image Preview */}
-        {imagePreview && (
-          <div className="mt-4">
-            <img
-              src={imagePreview}
-              alt="Course Preview"
-              className="w-40 h-40 object-cover"
-            />
-          </div>
-          )}
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="mt-4">
+                  <img
+                    src={imagePreview}
+                    alt="Course Preview"
+                    className="w-40 h-40 object-cover"
+                  />
+                </div>
+              )}
 
               {/* Description */}
               <FormField
@@ -432,7 +434,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                   <FormItem>
                     <FormLabel>Short Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Short description" {...field} />
+                      <Textarea placeholder="Short description" {...field} defaultValue={field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -447,7 +449,7 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
                   <FormItem>
                     <FormLabel>Long Description</FormLabel>
                     <FormControl>
-                      <RTE {...field} />
+                      <RTE {...field} defaultValue={field.value} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -492,6 +494,6 @@ const CourseForm: React.FC<CourseFormProp> = ({ course }) => {
       </AlertDialog>
     </>
   );
-};
+})
 
 export default CourseForm;
