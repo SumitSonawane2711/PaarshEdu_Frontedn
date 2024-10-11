@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Logo from "../atoms/Logo";
 import { useSelector } from "react-redux";
 import { RootState } from "@/core/redux/store";
-import { selectIsLoggedIn } from "@/core/redux/slices/user_slice";
 
 const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
