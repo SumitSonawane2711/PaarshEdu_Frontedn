@@ -108,8 +108,8 @@ function CourseDetails() {
       {/* Tab Section */}
       <div id="parentDiv" className=" relative ">
         {/* Main Content */}
-        <div className="w-full bg-red-300">
-        <div className="flex flex-col px-4 sm:px-10 py-6 lg:w-2/4 sm:ml-28">
+        <div className="w-full ">
+        <div className="flex flex-col px-4 sm:px-10 py-6 md:w-1/2 lg:w-2/4 md:ml-10 sm:ml-28">
           <header className="bg-slate-300 dark:bg-slate-900 flex items-center justify-center w-full rounded py-4 mb-6">
             <div className="flex justify-center space-x-4">
               <button
@@ -126,7 +126,6 @@ function CourseDetails() {
               </button>
             </div>
           </header>
-
           {/* Content Section */}
           <main ref={parentRef} className="flex-1 bg-white dark:bg-gray-900 p-4 sm:p-8 rounded-lg shadow-lg transition-all duration-500 ease-in-out">
             {activeTab === 'tab1' ? (
