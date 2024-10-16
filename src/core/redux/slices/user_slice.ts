@@ -1,19 +1,35 @@
 
-import { formSchema, loginSchema } from '@/core/schemas';
+import axiosClient from '@/core/axios/axiosClient';
+import { signupSchema, loginSchema } from '@/core/schemas';
 import { User, UserState } from '@/core/types/user';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import  { AxiosError } from 'axios';
 import { z } from 'zod';
 
-type UserInput = z.infer<typeof formSchema>;
+//fetch all users
+// Async thunk to fetch all users
+export const getAllUsers = createAsyncThunk<User[], void, { rejectValue: string }>(
+    'user/fetchAll',
+    async (_, thunkAPI) => {
+      try {
+        const response = await axiosClient.get<{ data: User[] }>('/user');
+        return response.data.data;
+      } catch (error) {
+        const typedError = error as AxiosError<{ message: string }>;
+        const errorMessage = typedError.response?.data?.message || 'Failed to fetch all users';
+        return thunkAPI.rejectWithValue(errorMessage);
+      }
+    }
+  )
 
+type UserInput = z.infer<typeof signupSchema>;
 // Async thunk for user registration
 export const registerUser = createAsyncThunk<User, UserInput>(
     'user/register',
     async (userData, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/user/register', userData);
-            return response.data.user;
+            const response = await axiosClient.post('/user/register', userData);
+            return response.data.data;
         } catch (error) {
             const typedError = error as AxiosError;
             const errorMessage = typedError.response?.data || 'Failed to register user';
@@ -29,8 +45,8 @@ export const loginUser = createAsyncThunk<User, LoginInput>(
     'user/login',
     async (loginData, thunkAPI) => {
         try {
-            const response = await axios.post('http://localhost:3000/api/v1/user/login', loginData);
-            return response.data.user;
+            const response = await axiosClient.post('/user/login', loginData);
+            return response.data ;
         } catch (error) {
             const typedError = error as AxiosError;
             const errorMessage = typedError.response?.data || 'Failed to login';
@@ -45,7 +61,7 @@ export const deleteUser = createAsyncThunk<number,number>(
         try {
             console.log("userId :",userId);
             
-            const response = await axios.post(`http://localhost:3000/api/v1/courses/deleteuser/${userId}`)
+            const response = await axiosClient.post(`/courses/deleteuser/${userId}`)
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -58,7 +74,7 @@ export const updateUser  = createAsyncThunk<User,{ userData: Partial<User> }>(
     "user/update",
     async(userData,thunkAPI) => {        
         try {
-            const response = await axios.post(
+            const response = await axiosClient.post(
                 "http://localhost:3000/api/v1/courses/updateUser",
                 userData
               );
@@ -71,8 +87,11 @@ export const updateUser  = createAsyncThunk<User,{ userData: Partial<User> }>(
     }
 )
 
+
+
 const initialState: UserState = {
-    user: JSON.parse(localStorage.getItem('user') || 'null'), // Load user from localStorage
+    items: [] as User[],
+    user: JSON.parse(localStorage.getItem('user') || 'null'),
     status: 'idle',
     error: null,
   };
@@ -80,55 +99,46 @@ const initialState: UserState = {
  const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        setUser: (state, action) => {
-            // console.log('action google payload : ', action.payload)
-            state.user = action.payload;
-          },
-    },
+    reducers: {},
     extraReducers: (builder) => {
-       builder
-          .addCase(registerUser.pending, (state) => {
-             state.status = 'loading';
-          })
-          .addCase(registerUser.fulfilled, (state, action) => {
-             state.status = 'succeeded';
-             state.user = action.payload;
-             localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
-          })
-          .addCase(registerUser.rejected, (state, action) => {
-             state.status = 'failed';
-             state.error = action.error.message || 'Failed to register';
-          })
-          .addCase(loginUser.pending, (state) => {
-             state.status = 'loading';
-          })
-          .addCase(loginUser.fulfilled, (state, action) => {
-             state.status = 'succeeded';
-             state.user = action.payload;
-             localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
-          })
-          .addCase(loginUser.rejected, (state, action) => {
-             state.status = 'failed';
-             state.error = action.error.message || 'Failed to login';
-          })
-          .addCase(updateUser.pending, (state) => {
+        builder
+        .addCase(getAllUsers.pending, (state) => {
             state.status = 'loading';
-         })
-         .addCase(updateUser.fulfilled, (state, action) => {
+            state.error = null;
+          })
+          .addCase(getAllUsers.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.user = action.payload;
-            localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
-         })
-         .addCase(updateUser.rejected, (state, action) => {
+            state.items = action.payload;
+          })
+          .addCase(getAllUsers.rejected, (state, action) => {
             state.status = 'failed';
-            state.error = action.error.message || 'Failed to update';
-         })         
-    },
- });
+            state.error = action.payload as string;
+          })
+        .addCase(registerUser.fulfilled, (state, action) => {
+         state.items.push(action.payload);
+       })
+       .addCase(loginUser.fulfilled,(state, action) => {
+        state.items.push(action.payload)
+       })
+        .addMatcher(
+         (action)=> action.type.endsWith('/pending'),
+         (state) => {
+             state.status = 'loading';
+         }
+        )
+        .addMatcher(
+         (action) => action.type.endsWith('/rejected'),
+         (state) => {
+             state.status = 'failed';
+         } 
+        );
+ },
+});
+
  
  export default userSlice.reducer;
-  
+
+ export const selectAllUsers = (state: { user: UserState }) => state.user.items;
  export const selectCurrentUser = (state: { user: UserState }): UserState['user'] => state.user.user;
  export const selectUserStatus = (state: { user: UserState }): UserState['status'] => state.user.status;
  export const selectUserError = (state: { user: UserState }): UserState['error'] => state.user.error;

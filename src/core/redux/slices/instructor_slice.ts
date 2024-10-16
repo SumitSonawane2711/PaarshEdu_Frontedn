@@ -1,6 +1,7 @@
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {  Instructor, InstructorState } from "@/core/types/user";
+import axiosClient from '../../axios/axiosClient'
 
 
 //fetch all instrucotrs
@@ -8,7 +9,7 @@ export const getAllInstrucotrs  = createAsyncThunk<Instructor[]>(
     'instructor/fetchAll',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get('http://localhost:3000/api/v1/courses/instructor');
+            const response = await axiosClient.get('/courses/instructor');
             return response.data.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -21,7 +22,7 @@ export const createInstructor  = createAsyncThunk<Instructor,FormData>(
     'instructor/create',
     async(formData,thunkAPI) => {
         try {
-            const response = await axios.post("http://localhost:3000/api/v1/courses/createInstructor",formData);
+            const response = await axiosClient.post("/courses/createInstructor",formData);
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -36,7 +37,7 @@ export const deleteInstructor = createAsyncThunk<number,number>(
         try {
             console.log("instructorId :",instructorId);
             
-            const response = await axios.post(`http://localhost:3000/api/v1/courses/deleteinstructor/${instructorId}`)
+            const response = await axiosClient.post(`/courses/deleteinstructor/${instructorId}`)
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
@@ -51,8 +52,8 @@ export const updateInstructor  = createAsyncThunk<Instructor,{ instructorData: P
         console.log("instructorData :",instructorData);
         
         try {
-            const response = await axios.post(
-                "http://localhost:3000/api/v1/courses/updateInstructor",
+            const response = await axiosClient.post(
+                "/courses/updateInstructor",
                 instructorData
               );
               

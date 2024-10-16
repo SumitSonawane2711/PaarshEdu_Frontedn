@@ -1,4 +1,5 @@
 export interface User {
+    id:number;
     name: string; 
     email: string; 
     phone: string; 
@@ -7,6 +8,7 @@ export interface User {
   }
 
   export interface UserState {
+    items: User[];
     user: User | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;

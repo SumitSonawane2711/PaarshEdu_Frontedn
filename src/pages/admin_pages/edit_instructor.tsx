@@ -48,7 +48,7 @@ const Edit_instructor = () => {
   useEffect(() => {
     dispatch(getAllInstrucotrs());
   },[dispatch]);
-
+  
   const handleDelete = async () => {
     if (selectedCourseId === null) return;
 

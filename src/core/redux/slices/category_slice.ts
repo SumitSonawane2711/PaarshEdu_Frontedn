@@ -1,6 +1,7 @@
 import { Category, CategoryState } from "@/core/types/category";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axiosClient from '../../axios/axiosClient'
+import { AxiosError } from "axios";
 
 // Initial state using the entity adapter's state management
 
@@ -9,7 +10,7 @@ export const getAllCategories = createAsyncThunk(
   "courses/categories",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("http://localhost:3000/api/v1/courses/catagories");
+      const response = await axiosClient.get("/courses/catagories");
       return response.data;
     } catch (error) {
       const typedError = error as AxiosError;
@@ -25,8 +26,8 @@ export const createCategory = createAsyncThunk<Category, FormData>(
   "category/create",
   async (formData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/courses/createCategory",
+      const response = await axiosClient.post(
+        "courses/createCategory",
         formData
       );
       return response.data;
@@ -46,8 +47,8 @@ export const updateCategory = createAsyncThunk<
   { categoryData: Partial<Category> }
 >("category/update", async (categoryData, thunkAPI) => {
   try {
-    const response = await axios.post(
-      `http://localhost:3000/api/v1/courses/updateCategory`,
+    const response = await axiosClient.post(
+      `/courses/updateCategory`,
       categoryData
     );
     return response.data;
@@ -65,7 +66,7 @@ export const deleteCategory = createAsyncThunk<number, number>(
   "category/delete",
   async (categoryId: number, thunkAPI) => {
     try {
-      await axios.post(`http://localhost:3000/api/v1/courses/delete-categories/${categoryId}`);
+      await axiosClient.post(`/courses/delete-categories/${categoryId}`);
       return categoryId;
     } catch (error) {
       const typedError = error as AxiosError;

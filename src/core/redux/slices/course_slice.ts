@@ -1,14 +1,16 @@
 // features/coursesSlice.ts
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import { Course, CoursesState } from "../../types/courses";
+import axiosClient from '../../axios/axiosClient'
+
 
 //
 export const fetchCourses = createAsyncThunk<Course[]>(
   "courses/fetchAll",
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get("http://localhost:3000/api/v1/courses");
+      const response = await axiosClient.get("/courses");
       return response.data.data;
     } catch (error) {
       const typedError = error as AxiosError;
@@ -25,7 +27,7 @@ export const getCourseByCatagory = createAsyncThunk<Course[], number>(
   "courses/fetchByCatagory",
   async (categoryId: number, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/courses/catagories/${categoryId}`);
+      const response = await axiosClient.get(`/courses/catagories/${categoryId}`);
       return response.data; // Ensure this is an array of Course objects
     } catch (error) {
       const typedError = error as AxiosError;
@@ -42,7 +44,7 @@ export const fetchCourseById = createAsyncThunk<Course, number>(
   "courses/fetchById",
   async (courseId, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/v1/courses/${courseId}`);
+      const response = await axiosClient.get(`/courses/${courseId}`);
       return response.data;
     } catch (error) {
       const typedError = error as AxiosError;
@@ -57,8 +59,8 @@ export const addCourse = createAsyncThunk<Course, FormData>(
   "courses/add",
   async (formData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/courses/createCourse",
+      const response = await axiosClient.post(
+        "/courses/createCourse",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -79,8 +81,8 @@ export const updateCourse = createAsyncThunk<Course, FormData>(
   "courses/update",
   async (courseData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/v1/courses/updateCourse`,
+      const response = await axiosClient.post(
+        `/courses/updateCourse`,
         courseData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -100,7 +102,7 @@ export const deleteCourse = createAsyncThunk<number, number>(
   "courses/delete",
   async (courseId: number, thunkAPI) => {
     try {
-      await axios.post(`http://localhost:3000/api/v1/courses/deleteCourse/${courseId}`);
+      await axiosClient.post(`/courses/deleteCourse/${courseId}`);
       return courseId;
     } catch (error) {
       const typedError = error as AxiosError;
