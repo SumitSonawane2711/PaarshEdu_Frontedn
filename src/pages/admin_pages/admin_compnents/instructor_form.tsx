@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogOverlay, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
@@ -6,12 +6,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useToast } from '@/hooks/use-toast';
 import { AppDispatch } from '@/core/redux/store';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createInstructor, getAllInstrucotrs, updateInstructor } from '@/core/redux/slices/instructor_slice';
+import { createInstructor, updateInstructor } from '@/core/redux/slices/instructor_slice';
 import { FaEdit } from 'react-icons/fa';
 import { Instructor } from '@/core/types/user';
 
@@ -86,6 +86,8 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
       }
 
       setIsConfirmOpen(false);
+      setIsopen(false);
+
       
 
     } catch (error) {

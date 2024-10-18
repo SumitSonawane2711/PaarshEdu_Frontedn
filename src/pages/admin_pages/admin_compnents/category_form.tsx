@@ -58,7 +58,9 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                 //   console.log("categoryData :",categoryData);
                   
                 const response = await dispatch(updateCategory(categoryData)).unwrap();
-                if (response) {
+                setIsopen(false);
+
+                   if (response) {
                     toast({
                         title: "Category updated successfully!",
                         description: "The Category has been successfully updated.",

@@ -17,7 +17,6 @@ import {  useEffect, useState } from 'react'
 import {  FaTrash } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Instructor_form from './admin_compnents/instructor_form';
 import { deleteUser, getAllUsers } from '@/core/redux/slices/user_slice';
 
 
@@ -61,21 +60,21 @@ const Edit_user = () => {
 
       if (response) {
         toast({
-          title: "Instructor Successfully Deleted",
-          description: `The course has been successfully removed.`,
+          title: "user Successfully Deleted",
+          description: `The user has been successfully removed.`,
           className: "bg-green-500 ",
         });
       } else {
         toast({
           title: "Deletion Error",
-          description: `There was an issue deleting the course. Please try again.`,
+          description: `There was an issue deleting the user. Please try again.`,
           className: "bg-red-500 text-white ",
         });
       }
     } catch (error) {
       console.log(error);
 
-      const errorMessage = "Instructor deletion failed. Please try again.";
+      const errorMessage = "user deletion failed. Please try again.";
       toast({ title: "Course deletion failed", description: errorMessage });
     }
   };
@@ -93,6 +92,8 @@ const Edit_user = () => {
             <th className="p-2 border-b border-gray-200">#</th>
             <th className="p-2 border-b border-gray-200">Name</th>
             <th className="p-2 border-b border-gray-200">Email</th>
+            <th className="p-2 border-b border-gray-200">number</th>
+            <th className="p-2 border-b border-gray-200">Role</th>
             <th className="p-2 border-b border-gray-200">Action</th>
           </tr>
         </thead>
@@ -109,11 +110,15 @@ const Edit_user = () => {
                 <td className="p-2 border-b text-center border-gray-200">
                   {user?.email || "Unknown"}
                 </td>
-                
-                
+                <td className="p-2 border-b text-center border-gray-200">
+                  {user?.phone || "Unknown"}
+                </td>
+                <td className="p-2 border-b text-center border-gray-200">
+                  {user?.role || "Unknown"}
+                </td>
                 <td className="p-4 border-b border-gray-200 ">
                   <div className='flex gap-2 justify-center'>
-                    <Instructor_form instructor={user}/>
+                    {/* <Instructor_form instructor={user}/> */}
                     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                       <AlertDialogTrigger asChild>
                         <button
