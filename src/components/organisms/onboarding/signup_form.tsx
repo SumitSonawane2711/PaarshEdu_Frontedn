@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { loginSchema, signupSchema } from '@/core/schemas'
+import { signupSchema } from '@/core/schemas'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -33,7 +33,7 @@ const SignupForm = () => {
     },
   })
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: z.infer<typeof signupSchema>) {
     console.log(values)
   
     try {

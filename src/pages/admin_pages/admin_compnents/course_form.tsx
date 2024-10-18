@@ -58,7 +58,7 @@ const formSchema = z.object({
   language: z.array(z.string()).min(1, "Please select at least one language"),
   level: z.string().min(2, { message: "Please select a course level" }),
   type: z.string().min(2, { message: "Please select a course type" }),
-  courseImage: z.any(),
+  courseImage: z.any().optional(),
   description: z.string().min(10, "Please provide a description"),
   longdescription: z.string().min(10, "Please provide a long description"),
 });
@@ -116,7 +116,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
 
   const handleConfirm = async () => {
 
-    // console.log("data :", formData);
+  console.log("data :", formData);
 
     const languagesString = formData?.language?.join(", ") || "";
     // console.log("formdataCID", formData?.categoryId)
@@ -144,7 +144,9 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
           instructorId: parseInt(formData?.instructorId || "0", 10),
           duration: parseInt(formData?.duration || "0", 10),
           language: languagesString,
-          id: course.id
+          id: course.id,
+          ...(formData?.courseImage && { courseImage: formData?.courseImage }) // Include courseImage only if it exists
+
         }
         // console.log("updatedData :", updatedData);
 
