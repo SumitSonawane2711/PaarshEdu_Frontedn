@@ -43,7 +43,7 @@ import { addCourse, updateCourse } from "@/core/redux/slices/course_slice"
 import { selectAllInstructors } from "@/core/redux/slices/instructor_slice"
 import { useToast } from "@/hooks/use-toast"
 import { selectAllCategories } from "@/core/redux/slices/category_slice"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { AppDispatch } from "@/core/redux/store"
 import { FaEdit } from "react-icons/fa"
 import { Course } from "@/core/types/courses"
@@ -65,9 +65,10 @@ const formSchema = z.object({
 
 interface CourseFormProp {
   course?: Course;
+  onToggle: () => void;
 }
 
-const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
+const CourseForm: React.FC<CourseFormProp> = React.memo(({ course,onToggle }) => {
   const categories = useSelector(selectAllCategories);
   const instructors = useSelector(selectAllInstructors);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -77,14 +78,6 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
 
   type Course = z.infer<typeof formSchema>;
   const [formData, setFormData] = useState<Course | null>(null); // To hold form data before confirmation
-
-  // console.log("course:", course);
-
-  useEffect(() => {
-    if (course?.imageUrl) {
-      setImagePreview(course.imageUrl); // Assume courseImageUrl is the URL from backend
-    }
-  }, [course]);
 
   // Handle image selection for preview
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +100,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
       language: course?.language ? course.language.split(", ") : [],
       level: course?.level || "",
       type: course?.type || "",
-      courseImage: course?.imageUrl || null,
+      courseImage:null,
       description: course?.description || "",
       longdescription: course?.longdescription || "",
       instructorId: course?.instructorId.toString() || "",
@@ -144,7 +137,10 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
           instructorId: parseInt(formData?.instructorId || "0", 10),
           duration: parseInt(formData?.duration || "0", 10),
           language: languagesString,
-          id: course.id
+          id: course.id,
+          // Include the courseImage field only if a new image is provided
+          ...(formData?.courseImage && formData.courseImage.length > 0 && { courseImage: formData.courseImage }),
+
         }
         // console.log("updatedData :", updatedData);
 
@@ -155,8 +151,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
             description: "The course information has been updated successfully.",
             className: "bg-green-500 text-white",
           });
-          window.location.reload();
-        }
+          onToggle();        }
       } else {
         const response = await dispatch(addCourse(modifiedData)).unwrap();
 
@@ -166,8 +161,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
             description: "The course has been successfully added.",
             className: "bg-green-500 text-white",
           });
-          window.location.reload();
-        }
+          onToggle();        }
       }
 
       setIsConfirmOpen(false);
@@ -416,7 +410,7 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
               />
 
               {/* Image Preview */}
-              {imagePreview && (
+              {imagePreview ? (
                 <div className="mt-4">
                   <img
                     src={imagePreview}
@@ -424,7 +418,15 @@ const CourseForm: React.FC<CourseFormProp> = React.memo(({ course }) => {
                     className="w-40 h-40 object-cover"
                   />
                 </div>
-              )}
+              ) :
+              <div className="mt-4">
+              <img
+                src={course?.imageUrl}
+                alt="Course Preview"
+                className="w-40 h-40 object-cover"
+              />
+            </div>
+              }
 
               {/* Description */}
               <FormField

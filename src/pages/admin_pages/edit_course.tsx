@@ -25,11 +25,18 @@ const Edit_course = () => {
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const [isToggled, setIsToggled] = useState(false);
+
+  // Function to toggle the state
+  const toggleState = () => {
+    setIsToggled(prevState => !prevState);
+  };
+
   useEffect(() => {
     dispatch(fetchCourses());
     dispatch(getAllInstrucotrs());
     dispatch(getAllCategories());
-  },[dispatch]);
+  },[dispatch,isToggled]);
 
 
   const currentCourses = courses.slice(
@@ -80,7 +87,7 @@ const Edit_course = () => {
       <div className="flex justify-between px-2 items-center mb-4">
         <h1 className="text-2xl font-bold">Courses</h1>
         <div>
-          <CourseForm />
+          <CourseForm onToggle={toggleState}/>
         </div>
       </div>
 
@@ -133,7 +140,7 @@ const Edit_course = () => {
                   <td className="p-4 border-b text-center border-gray-200 ">
                     <div className='flex gap-2'>
                       <ViewCourse courseId={course.id} />
-                      <CourseForm course={course} />
+                      <CourseForm course={course} onToggle={toggleState} />
                       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                         <AlertDialogTrigger asChild>
                           <button
