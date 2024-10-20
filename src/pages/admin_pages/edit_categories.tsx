@@ -28,6 +28,16 @@ const Edit_categories = () => {
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [isToggled, setIsToggled] = useState(false);
+
+  // Function to toggle the state
+  const toggleState = () => {
+    setIsToggled(prevState => !prevState);
+  };
+
+  useEffect(() => {
+    dispatch(getAllCategories());
+  },[dispatch,isToggled]);
 
   const currentCategories = categories?.slice(
     (currentPage - 1) * itemsPerPage,
@@ -72,16 +82,14 @@ const Edit_categories = () => {
     }
   };
   
-  useEffect(() => {
-    dispatch(getAllCategories());
-  },[dispatch]);
+  
 
   return (
     <div className="">
     <div className="flex justify-between px-2 items-center mb-4">
       <h1 className="text-2xl font-bold">Categories</h1>
       <div>
-        <Category_form />
+        <Category_form onToggle={toggleState} />
       </div>
     </div>
 
@@ -112,7 +120,7 @@ const Edit_categories = () => {
                 
                 <td className="p-4 border-b border-gray-200 ">
                   <div className='flex gap-2 justify-center'>
-                    <Category_form category={category}/>
+                    <Category_form category={category} onToggle={toggleState}/>
                     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                       <AlertDialogTrigger asChild>
                         <button

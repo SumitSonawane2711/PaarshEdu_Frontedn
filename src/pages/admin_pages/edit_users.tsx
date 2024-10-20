@@ -30,6 +30,10 @@ const Edit_user = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  useEffect(() => {
+    dispatch(getAllUsers());
+  },[dispatch]);
+
   const currentUsers = users?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -44,12 +48,6 @@ const Edit_user = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  },[dispatch]);
-  
-  console.log("users :",users);
 
   const handleDelete = async () => {
     if (selectedUserId === null) return;

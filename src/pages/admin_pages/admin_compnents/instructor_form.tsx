@@ -22,15 +22,15 @@ const InstructorSchema = z.object({
 
 interface InstructorProps {
   instructor?: Instructor;
+  onToggle: () => void;
 }
 
 type InstructorType = z.infer<typeof InstructorSchema>;
-const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
+const Instructor_form:React.FC<InstructorProps> = ({instructor,onToggle }) => {
     const { toast } = useToast();
     const dispatch = useDispatch<AppDispatch>();
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [isOpen, setIsopen] = useState(false);
-
     const [formData, setFormData] = useState<InstructorType | null>(null)
 
     const form = useForm<z.infer<typeof InstructorSchema>>({
@@ -65,7 +65,7 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
             description: "The Instructor has been successfully updated.",
             className: "bg-green-500 text-white",
         });
-        window.location.reload();
+        onToggle();
         }
         // console.log(response);
         
@@ -80,7 +80,7 @@ const Instructor_form:React.FC<InstructorProps> = ({instructor}) => {
               description: "The Instructor has been successfully added.",
               className: "bg-green-500 text-white",
           });
-          window.location.reload();
+          onToggle();
       }
     //   console.log(response);
       }

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createCategory, updateCategory } from '@/core/redux/slices/category_slice'
+import { createCategory, getAllCategories, updateCategory } from '@/core/redux/slices/category_slice'
 import { AppDispatch } from '@/core/redux/store';
 import { Category } from '@/core/types/category';
 import { useToast } from '@/hooks/use-toast';
@@ -23,16 +23,17 @@ const CategorySchema = z.object({
 
 interface CategoryProps {
     category?: Category;
+    onToggle: () => void;
 }
 
 type Categroy = z.infer<typeof CategorySchema>;
-const Category_form: React.FC<CategoryProps> = ({ category }) => {
+const Category_form: React.FC<CategoryProps> = ({ category,onToggle }) => {
     const { toast } = useToast();
     const dispatch = useDispatch<AppDispatch>();
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [isOpen, setIsopen] = useState(false);
-
     const [formData, setFormData] = useState<Categroy>()
+// To prevent triggering on the first render
 
     const form = useForm<z.infer<typeof CategorySchema>>({
         resolver: zodResolver(CategorySchema),
@@ -66,7 +67,8 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                         description: "The Category has been successfully updated.",
                         className: "bg-green-500 text-white",
                     });
-                    window.location.reload();
+                    onToggle();
+                    // window.location.reload();
                 }
 
             } else {
@@ -78,7 +80,8 @@ const Category_form: React.FC<CategoryProps> = ({ category }) => {
                         description: "The Category has been successfully added.",
                         className: "bg-green-500 text-white",
                     });
-                    window.location.reload();
+                    onToggle();
+                    // window.location.reload();
                 }
 
             }

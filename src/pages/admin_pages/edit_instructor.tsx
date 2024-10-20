@@ -30,6 +30,17 @@ const Edit_instructor = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
+  const [isToggled, setIsToggled] = useState(false);
+
+  // Function to toggle the state
+  const toggleState = () => {
+    setIsToggled(prevState => !prevState);
+  };
+
+  useEffect(() => {
+    dispatch(getAllInstrucotrs());
+  },[dispatch,isToggled]);
+
   const currentInstructors = instructors?.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -44,10 +55,6 @@ const Edit_instructor = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
-
-  useEffect(() => {
-    dispatch(getAllInstrucotrs());
-  },[dispatch]);
   
   const handleDelete = async () => {
     if (selectedCourseId === null) return;
@@ -82,7 +89,7 @@ const Edit_instructor = () => {
     <div className="flex justify-between px-2 items-center mb-4">
       <h1 className="text-2xl font-bold">Instructor</h1>
       <div>
-        <Instructor_form/>
+        <Instructor_form onToggle={toggleState}/>
       </div>
     </div>
 
@@ -113,7 +120,7 @@ const Edit_instructor = () => {
                 
                 <td className="p-4 border-b border-gray-200 ">
                   <div className='flex gap-2 justify-center'>
-                    <Instructor_form instructor={instructor}/>
+                    <Instructor_form instructor={instructor} onToggle={toggleState}/>
                     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
                       <AlertDialogTrigger asChild>
                         <button
