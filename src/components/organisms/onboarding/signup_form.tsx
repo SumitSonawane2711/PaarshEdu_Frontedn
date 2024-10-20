@@ -14,10 +14,6 @@ import { useDispatch } from 'react-redux'
 import { AppDispatch } from '@/core/redux/store'
 import { registerUser } from '@/core/redux/slices/user_slice'
 
-
-
-
-
 const SignupForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -34,7 +30,7 @@ const SignupForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values)
+    // console.log(values)
   
     try {
       const response = await dispatch(registerUser(values)).unwrap(); // unwrap to get the payload or throw error
@@ -42,8 +38,8 @@ const SignupForm = () => {
       console.log('Response after registration', response);
   
       if (response) {
-        navigate('/');
         toast({ title: "Sign up successful!", description: "You have been registered.",className:'bg-green-600' });
+        navigate('/');
       }
     } catch (err) {
       console.log(err);
@@ -54,7 +50,6 @@ const SignupForm = () => {
 
   return (
     <Container>
-
       <Card className="sm:w-1/3 my-20  ">
         <CardHeader>
           <div className="mb-2 flex justify-center">

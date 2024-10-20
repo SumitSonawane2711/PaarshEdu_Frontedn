@@ -32,7 +32,7 @@ const SignInForm = () => {
 
     try {
       const response = await dispatch(loginUser(values)).unwrap(); // Unwrap to handle success or error
-      console.log('Response after login', response.role);
+      console.log('Response after login', response);
       if (response) {
         navigate('/admin');
         toast({ title: "Sign in successful!", description: "You have been signed in.", className:'bg-green-600' });

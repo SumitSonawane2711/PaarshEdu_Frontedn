@@ -29,7 +29,7 @@ export const registerUser = createAsyncThunk<User, UserInput>(
     async (userData, thunkAPI) => {
         try {
             const response = await axiosClient.post('/user/register', userData);
-            return response.data.user;
+            return response.data.data;
         } catch (error) {
             const typedError = error as AxiosError;
             const errorMessage = typedError.response?.data || 'Failed to register user';
@@ -90,8 +90,8 @@ export const updateUser  = createAsyncThunk<User,{ userData: Partial<User> }>(
 
 
 const initialState: UserState = {
+    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
     items: [] as User[],
-    user: JSON.parse(localStorage.getItem('user') || 'null'),
     status: 'idle',
     error: null,
   };
@@ -102,23 +102,19 @@ const initialState: UserState = {
     reducers: {},
     extraReducers: (builder) => {
         builder
-        .addCase(getAllUsers.pending, (state) => {
-            state.status = 'loading';
-            state.error = null;
-          })
-          .addCase(getAllUsers.fulfilled, (state, action) => {
+        .addCase(getAllUsers.fulfilled, (state, action) => {
             state.status = 'succeeded';
             state.items = action.payload;
           })
-          .addCase(getAllUsers.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.payload as string;
-          })
         .addCase(registerUser.fulfilled, (state, action) => {
-         state.items.push(action.payload);
+            state.status = 'succeeded';
+            state.user = action.payload;
+            localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
        })
        .addCase(loginUser.fulfilled,(state, action) => {
-        state.items.push(action.payload)
+             state.status = 'succeeded';
+             state.user = action.payload;
+             localStorage.setItem('user', JSON.stringify(action.payload)); // Save user to localStorage
        })
         .addMatcher(
          (action)=> action.type.endsWith('/pending'),
