@@ -23,7 +23,6 @@ import { deleteUser, getAllUsers } from '@/core/redux/slices/user_slice';
 const Edit_user = () => {
   const dispatch = useDispatch<AppDispatch>();
   const users = useSelector((state:RootState)=>state.users.items);
-  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const { toast } = useToast();
@@ -62,16 +61,16 @@ const Edit_user = () => {
           description: `The user has been successfully removed.`,
           className: "bg-green-500 ",
         });
+        window.location.reload();
       } else {
         toast({
           title: "Deletion Error",
           description: `There was an issue deleting the user. Please try again.`,
           className: "bg-red-500 text-white ",
         });
-      }
+      } 
     } catch (error) {
       console.log(error);
-
       const errorMessage = "user deletion failed. Please try again.";
       toast({ title: "Course deletion failed", description: errorMessage });
     }

@@ -29,7 +29,7 @@ export const registerUser = createAsyncThunk<User, UserInput>(
     async (userData, thunkAPI) => {
         try {
             const response = await axiosClient.post('/user/register', userData);
-            return response.data.data;
+            return response.data.user;
         } catch (error) {
             const typedError = error as AxiosError;
             const errorMessage = typedError.response?.data || 'Failed to register user';
@@ -46,7 +46,7 @@ export const loginUser = createAsyncThunk<User, LoginInput>(
     async (loginData, thunkAPI) => {
         try {
             const response = await axiosClient.post('/user/login', loginData);
-            return response.data ;
+            return response.data.data;
         } catch (error) {
             const typedError = error as AxiosError;
             const errorMessage = typedError.response?.data || 'Failed to login';
@@ -61,7 +61,7 @@ export const deleteUser = createAsyncThunk<number,number>(
         try {
             console.log("userId :",userId);
             
-            const response = await axiosClient.post(`/courses/deleteuser/${userId}`)
+            const response = await axiosClient.post(`/user/deleteUser/${userId}`)
             return response.data;
         } catch (error) {
             const typedError = error as AxiosError;
