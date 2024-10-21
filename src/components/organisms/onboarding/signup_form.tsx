@@ -35,7 +35,7 @@ const SignupForm = () => {
     try {
       const response = await dispatch(registerUser(values)).unwrap(); // unwrap to get the payload or throw error
   
-      console.log('Response after registration', response);
+      // console.log('Response after registration', response);
   
       if (response) {
         toast({ title: "Sign up successful!", description: "You have been registered.",className:'bg-green-600' });
