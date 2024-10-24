@@ -95,7 +95,7 @@ const Edit_user = () => {
           </tr>
         </thead>
         <tbody>
-          {currentUsers?.map((user, index) => {
+          {currentUsers?.filter(user => user.role !== "admin").map((user, index) => {
             return (
               <tr key={user.id}>
                 <td className="p-2 border-b text-center border-gray-200">
